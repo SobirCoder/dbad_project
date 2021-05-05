@@ -1,172 +1,191 @@
-create table COUNTRIES(
-  COUNTRY_ID                      int(10) unsigned    not null auto_increment,
-  NAME                            varchar(250)        not null,
-  STATE                           varchar(1)          not null comment '(A)ctive, (P)assive - default Active',
-  constraint COUNTRIES_PK primary key (COUNTRY_ID),
-  constraint COUNTRIES_U1 unique (NAME)
+-- --------------------------------------------------------------------------------------------------
+-- countries
+-- --------------------------------------------------------------------------------------------------
+create table countries(
+  country_id                      int(10) unsigned    not null auto_increment,
+  name                            varchar(250)        not null,
+  state                           varchar(1)          not null comment '(a)ctive, (p)assive - default active',
+  constraint countries_pk primary key (country_id),
+  constraint countries_u1 unique (name)
 );
 
-alter table COUNTRIES add constraint COUNTRIES_C1 check (STATE in ('A', 'P'));
-alter table COUNTRIES comment 'list of reference countries in the system';
+alter table countries add constraint countries_c1 check (state in ('a', 'p'));
+alter table countries comment 'list of reference countries in the system';
 
-
-create table REGIONS(
-  REGION_ID                       int(10) unsigned    not null auto_increment,
-  NAME                            varchar(250)        not null,
-  COUNTRY_ID                      int(10) unsigned    not null,
-  STATE                           varchar(1)          not null comment '(A)ctive, (P)assive - default Active',
-  constraint REGIONS_PK primary key (REGION_ID),
-  constraint REGIONS_U1 unique (NAME),
-  constraint REGIONS_F1 foreign key (COUNTRY_ID) references COUNTRIES(COUNTRY_ID) on delete cascade
+-- --------------------------------------------------------------------------------------------------
+-- regions
+-- --------------------------------------------------------------------------------------------------
+create table regions(
+  region_id                       int(10) unsigned    not null auto_increment,
+  name                            varchar(250)        not null,
+  country_id                      int(10) unsigned    not null,
+  state                           varchar(1)          not null comment '(a)ctive, (p)assive - default active',
+  constraint regions_pk primary key (region_id),
+  constraint regions_u1 unique (name),
+  constraint regions_f1 foreign key (country_id) references countries(country_id) on delete cascade
 );
 
-alter table REGIONS add constraint REGIONS_C1 check (STATE in ('A', 'P'));
-alter table REGIONS comment 'list of reference regions in the system';
+alter table regions add constraint regions_c1 check (state in ('a', 'p'));
+alter table regions comment 'list of reference regions in the system';
 
-
-create table PERSONS(
-  PERSON_ID                       int(10) unsigned    not null auto_increment,
-  FIRST_NAME                      varchar(250)        not null,
-  LAST_NAME                       varchar(250)        not null,
-  MIDDLE_NAME                     varchar(250),
-  PASSPORT_NUMBER                 varchar(250)        not null,
-  DATE_OF_BIRTH                   datetime            not null,
-  PLACE_OF_BIRTH_ID               int(10) unsigned    not null,
-  GENDER                          varchar(1)          not null comment '(M)ale, (F)emale',
-  REGION_ID                       int(10) unsigned    not null,
-  ADDRESS                         varchar(250)        not null,
-  PHONE                           varchar(250),
-  EMAIL                           varchar(250),
-  constraint PERSONS_PK primary key (PERSON_ID),
-  constraint PERSONS_U1 unique (FIRST_NAME, LAST_NAME, MIDDLE_NAME),
-  constraint PERSONS_U2 unique (PASSPORT_NUMBER),
-  constraint PERSONS_F1 foreign key (PLACE_OF_BIRTH_ID) references REGIONS(REGION_ID),
-  constraint PERSONS_F2 foreign key (REGION_ID) references REGIONS(REGION_ID)
+-- --------------------------------------------------------------------------------------------------
+-- persons
+-- --------------------------------------------------------------------------------------------------
+create table persons(
+  person_id                       int(10) unsigned    not null auto_increment,
+  first_name                      varchar(250)        not null,
+  last_name                       varchar(250)        not null,
+  middle_name                     varchar(250),
+  passport_number                 varchar(250)        not null,
+  date_of_birth                   datetime            not null,
+  place_of_birth                  int(10) unsigned    not null,
+  gender                          varchar(1)          not null comment '(m)ale, (f)emale',
+  region_id                       int(10) unsigned    not null,
+  address                         varchar(250)        not null,
+  phone                           varchar(250),
+  email                           varchar(250),
+  constraint persons_pk primary key (person_id),
+  constraint persons_u1 unique (first_name, last_name, middle_name),
+  constraint persons_u2 unique (passport_number),
+  constraint persons_f1 foreign key (place_of_birth) references regions(region_id),
+  constraint persons_f2 foreign key (region_id) references regions(region_id)
 );
 
-alter table PERSONS add constraint PERSONS_C1 check (GENDER in ('M', 'F'));
-alter table PERSONS comment 'list of reference persons in the system';
+alter table persons add constraint persons_c1 check (gender in ('m', 'f'));
+alter table persons comment 'list of reference persons in the system';
 
-
-create table BLOOD_GROUPS(
-  BLOOD_GROUP_ID                  int(10) unsigned    not null auto_increment,
-  NAME                            varchar(250)        not null,
-  constraint BLOOD_GROUPS_PK primary key (BLOOD_GROUP_ID),
-  constraint BLOOD_GROUPS_U1 unique (NAME)
+-- --------------------------------------------------------------------------------------------------
+-- blood groups
+-- --------------------------------------------------------------------------------------------------
+create table blood_groups(
+  blood_group_id                  int(10) unsigned    not null auto_increment,
+  name                            varchar(250)        not null,
+  constraint blood_groups_pk primary key (blood_group_id),
+  constraint blood_groups_u1 unique (name)
 );
 
-alter table BLOOD_GROUPS comment 'list of reference blood groups in the system';
+alter table blood_groups comment 'list of reference blood groups in the system';
 
-
-create table HOSPITALS(
-  HOSPITAL_ID                     int(10) unsigned    not null auto_increment,
-  NAME                            varchar(250)        not null,
-  REGION_ID                       int(10) unsigned    not null,
-  ADDRESS                         varchar(250)        not null,
-  PHONE                           varchar(250),
-  FAX                             varchar(250),
-  STATE                           varchar(1)          not null comment '(A)ctive, (P)assive - default Active',
-  constraint HOSPITALS_PK primary key (HOSPITAL_ID),
-  constraint HOSPITALS_U1 unique (NAME),
-  constraint HOSPITALS_F1 foreign key (REGION_ID) references REGIONS(REGION_ID)
+-- --------------------------------------------------------------------------------------------------
+-- hospitals
+-- --------------------------------------------------------------------------------------------------
+create table hospitals(
+  hospital_id                     int(10) unsigned    not null auto_increment,
+  name                            varchar(250)        not null,
+  region_id                       int(10) unsigned    not null,
+  address                         varchar(250)        not null,
+  phone                           varchar(250),
+  fax                             varchar(250),
+  state                           varchar(1)          not null comment '(a)ctive, (p)assive - default active',
+  constraint hospitals_pk primary key (hospital_id),
+  constraint hospitals_u1 unique (name),
+  constraint hospitals_f1 foreign key (region_id) references regions(region_id)
 );
 
-alter table HOSPITALS add constraint HOSPITALS_C1 check (STATE in ('A', 'P'));
-alter table HOSPITALS comment 'list of reference hospitals in the system';
+alter table hospitals add constraint hospitals_c1 check (state in ('a', 'p'));
+alter table hospitals comment 'list of reference hospitals in the system';
 
-
-create table EMPLOYEES(
-  EMPLOYEE_ID                     int(10) unsigned    not null auto_increment,
-  PERSON_ID                       int(10) unsigned    not null,
-  HOSPITAL_ID                     int(10) unsigned    not null,
-  JOB_TITLE                       varchar(250)        not null,
-  START_DATE                      datetime            not null,
-  END_DATE                        datetime,
-  SALARY                          varchar(250)        not null,
-  STATE                           varchar(1)          not null comment '(A)ctive, (P)assive - default Active',
-  constraint EMPLOYEES_PK primary key (EMPLOYEE_ID),
-  constraint EMPLOYEES_F1 foreign key (PERSON_ID) references PERSONS(PERSON_ID),
-  constraint EMPLOYEES_F2 foreign key (HOSPITAL_ID) references HOSPITALS(HOSPITAL_ID)
+-- --------------------------------------------------------------------------------------------------
+-- employees
+-- --------------------------------------------------------------------------------------------------
+create table employees(
+  employee_id                     int(10) unsigned    not null auto_increment,
+  person_id                       int(10) unsigned    not null,
+  hospital_id                     int(10) unsigned    not null,
+  job_title                       varchar(250)        not null,
+  start_date                      datetime            not null,
+  end_date                        datetime,
+  salary                          varchar(250)        not null,
+  state                           varchar(1)          not null comment '(a)ctive, (p)assive - default active',
+  constraint employees_pk primary key (employee_id),
+  constraint employees_f1 foreign key (person_id) references persons(person_id),
+  constraint employees_f2 foreign key (hospital_id) references hospitals(hospital_id)
 );
 
-alter table EMPLOYEES add constraint EMPLOYEES_C1 check (END_DATE is null or START_DATE < END_DATE);
-alter table EMPLOYEES add constraint EMPLOYEES_C2 check (STATE in ('A', 'P'));
-alter table EMPLOYEES comment 'list of reference hospital employees in the system';
+alter table employees add constraint employees_c1 check (end_date is null or start_date < end_date);
+alter table employees add constraint employees_c2 check (state in ('a', 'p'));
+alter table employees comment 'list of reference hospital employees in the system';
 
-
-create table PROCEDURE_TYPES(
-  PROCEDURE_TYPE_ID               int(10) unsigned    not null auto_increment,
-  NAME                            varchar(250)        not null,
-  constraint PROCEDURE_TYPES_PK primary key (PROCEDURE_TYPE_ID),
-  constraint PROCEDURE_TYPES_U1 unique (NAME)
+-- --------------------------------------------------------------------------------------------------
+-- procedure types - 
+-- --------------------------------------------------------------------------------------------------
+create table procedure_types(
+  procedure_type_id               int(10) unsigned    not null auto_increment,
+  name                            varchar(250)        not null,
+  constraint procedure_types_pk primary key (procedure_type_id),
+  constraint procedure_types_u1 unique (name)
 );
 
-alter table PROCEDURE_TYPES comment 'list of reference procedure types in the system';
+alter table procedure_types comment 'list of reference procedure types in the system';
 
-
-create table PROCEDURES(
-  PROCEDURE_ID                   int(10) unsigned     not null auto_increment,
-  PATIENT_ID                      int(10) unsigned    not null,
-  HOSPITAL_ID                     int(10) unsigned    not null,
-  PROCEDURE_TYPE_ID               int(10) unsigned    not null,
-  START_TIME                      datetime(6),
-  END_TIME                        datetime(6),
-  STATUS                          varchar(1)          not null comment '(W)aiting, (S)cheduled, on (G)oing, (P)aused, (F)inished',
-  constraint PROCEDURES_PK primary key (PROCEDURE_ID),
-  constraint PROCEDURES_F1 foreign key (PATIENT_ID) references PERSONS(PERSON_ID),
-  constraint PROCEDURES_F2 foreign key (HOSPITAL_ID) references HOSPITALS(HOSPITAL_ID),
-  constraint PROCEDURES_F3 foreign key (PROCEDURE_TYPE_ID) references PROCEDURE_TYPES(PROCEDURE_TYPE_ID)
+-- --------------------------------------------------------------------------------------------------
+-- --------------------------------------------------------------------------------------------------
+create table procedures(
+  procedure_id                    int(10) unsigned    not null auto_increment,
+  patient_id                      int(10) unsigned    not null,
+  hospital_id                     int(10) unsigned    not null,
+  procedure_type_id               int(10) unsigned    not null,
+  start_time                      datetime(6),
+  end_time                        datetime(6),
+  status                          varchar(1)          not null comment '(w)aiting, (s)cheduled, on (g)oing, (p)aused, (f)inished',
+  constraint procedures_pk primary key (procedure_id),
+  constraint procedures_f1 foreign key (patient_id) references persons(person_id),
+  constraint procedures_f2 foreign key (hospital_id) references hospitals(hospital_id),
+  constraint procedures_f3 foreign key (procedure_type_id) references procedure_types(procedure_type_id)
 );
 
-alter table PROCEDURES add constraint PROCEDURES_C1 check (START_TIME is null or END_TIME is null or START_TIME < END_TIME);
-alter table PROCEDURES add constraint PROCEDURES_C2 check (STATUS in ('W', 'S', 'G', 'P', 'F'));
-alter table PROCEDURES add constraint PROCEDURES_C3 check (START_TIME is null and STATUS in ('W', 'S') or START_TIME is not null);
-alter table PROCEDURES add constraint PROCEDURES_C4 check (END_TIME is null and STATUS in ('W', 'S', 'G', 'P') or END_TIME is not null);
-alter table PROCEDURES comment 'list of curing procedures in the hospital';
+alter table procedures add constraint procedures_c1 check (start_time is null or end_time is null or start_time < end_time);
+alter table procedures add constraint procedures_c2 check (status in ('w', 's', 'g', 'p', 'f'));
+alter table procedures add constraint procedures_c3 check (start_time is null and status in ('w', 's') or start_time is not null);
+alter table procedures add constraint procedures_c4 check (end_time is null and status in ('w', 's', 'g', 'p') or end_time is not null);
+alter table procedures comment 'list of curing procedures in the hospital';
 
-
-create table PROCEDURE_DOCTORS(
-  PROCEDURE_ID                    int(10) unsigned    not null,
-  DOCTOR_ID                       int(10) unsigned    not null auto_increment,
-  DOCTOR_ROLE                     varchar(250)        not null,
-  START_TIME                      datetime(6),
-  END_TIME                        datetime(6),
-  STATUS                          varchar(1)          not null comment '(W)aiting, (S)cheduled, on (G)oing, (P)aused, (F)inished',
-  constraint PROCEDURE_DOCTORS_PK primary key (PROCEDURE_ID, DOCTOR_ID),
-  constraint PROCEDURE_DOCTORS_F1 foreign key (PROCEDURE_ID) references PROCEDURES(PROCEDURE_ID),
-  constraint PROCEDURE_DOCTORS_F2 foreign key (DOCTOR_ID) references EMPLOYEES(EMPLOYEE_ID)
+-- --------------------------------------------------------------------------------------------------
+-- --------------------------------------------------------------------------------------------------
+create table procedure_doctors(
+  procedure_id                    int(10) unsigned    not null,
+  doctor_id                       int(10) unsigned    not null,
+  doctor_role                     varchar(250)        not null,
+  start_time                      datetime(6),
+  end_time                        datetime(6),
+  status                          varchar(1)          not null comment '(w)aiting, (s)cheduled, on (g)oing, (p)aused, (f)inished',
+  constraint procedure_doctors_pk primary key (procedure_id, doctor_id),
+  constraint procedure_doctors_f1 foreign key (procedure_id) references procedures(procedure_id),
+  constraint procedure_doctors_f2 foreign key (doctor_id) references employees(employee_id)
 );
 
-alter table PROCEDURE_DOCTORS add constraint PROCEDURE_DOCTORS_C1 check (START_TIME is null or END_TIME is null or START_TIME < END_TIME);
-alter table PROCEDURE_DOCTORS add constraint PROCEDURE_DOCTORS_C2 check (STATUS in ('W', 'S', 'G', 'P', 'F'));
-alter table PROCEDURE_DOCTORS add constraint PROCEDURE_DOCTORS_C3 check (START_TIME is null and STATUS in ('W', 'S') or START_TIME is not null);
-alter table PROCEDURE_DOCTORS add constraint PROCEDURE_DOCTORS_C4 check (END_TIME is null and STATUS in ('W', 'S', 'G', 'P') or END_TIME is not null);
-alter table PROCEDURE_DOCTORS comment 'list of curing procedures in the hospital';
+alter table procedure_doctors add constraint procedure_doctors_c1 check (start_time is null or end_time is null or start_time < end_time);
+alter table procedure_doctors add constraint procedure_doctors_c2 check (status in ('w', 's', 'g', 'p', 'f'));
+alter table procedure_doctors add constraint procedure_doctors_c3 check (start_time is null and status in ('w', 's') or start_time is not null);
+alter table procedure_doctors add constraint procedure_doctors_c4 check (end_time is null and status in ('w', 's', 'g', 'p') or end_time is not null);
+alter table procedure_doctors comment 'list of curing procedures in the hospital';
 
-
-create table BLOOD_DRAWINGS(
-  DRAWING_ID                      int(10) unsigned    not null auto_increment,
-  PROCEDURE_ID                    int(10) unsigned    not null,
-  BLOOD_GROUP_ID                  int(10) unsigned    not null,
-  AMOUNT                          int(10) unsigned    not null,
-  EXPIRY_DATE                     datetime            not null,
-  STATUS                          varchar(1)          not null comment '(A)vailable, (N)not available, (D)onated, (E)xpired',
-  constraint BLOOD_DRAWINGS_PK primary key (DRAWING_ID),
-  constraint BLOOD_DRAWINGS_F1 foreign key (PROCEDURE_ID) references PROCEDURES(PROCEDURE_ID),
-  constraint BLOOD_DRAWINGS_F2 foreign key (BLOOD_GROUP_ID) references BLOOD_GROUPS(BLOOD_GROUP_ID)
+-- --------------------------------------------------------------------------------------------------
+-- --------------------------------------------------------------------------------------------------
+create table blood_drawings(
+  drawing_id                      int(10) unsigned    not null auto_increment,
+  procedure_id                    int(10) unsigned    not null,
+  blood_group_id                  int(10) unsigned    not null,
+  amount                          int(10) unsigned    not null,
+  expiry_date                     datetime            not null,
+  status                          varchar(1)          not null comment '(a)vailable, (n)not available, (d)onated, (e)xpired',
+  constraint blood_drawings_pk primary key (drawing_id),
+  constraint blood_drawings_f1 foreign key (procedure_id) references procedures(procedure_id),
+  constraint blood_drawings_f2 foreign key (blood_group_id) references blood_groups(blood_group_id)
 );
 
-alter table BLOOD_DRAWINGS add constraint BLOOD_DRAWINGS_C1 check (STATUS in ('A', 'N', 'D', 'E'));
-alter table BLOOD_DRAWINGS comment 'blood bank of the hospital';
+alter table blood_drawings add constraint blood_drawings_c1 check (status in ('a', 'n', 'd', 'e'));
+alter table blood_drawings comment 'blood bank of the hospital';
 
-
-create table BLOOD_DONATIONS(
-  DONATION_ID                     int(10) unsigned    not null auto_increment,
-  PROCEDURE_ID                    int(10) unsigned    not null,
-  DRAWING_ID                      int(10) unsigned    not null,
-  constraint BLOOD_DONATIONS_PK primary key (DONATION_ID),
-  constraint BLOOD_DONATIONS_F1 foreign key (PROCEDURE_ID) references PROCEDURES(PROCEDURE_ID),
-  constraint BLOOD_DONATIONS_F2 foreign key (DRAWING_ID) references BLOOD_DRAWINGS(DRAWING_ID)
+-- --------------------------------------------------------------------------------------------------
+-- --------------------------------------------------------------------------------------------------
+create table blood_donations(
+  donation_id                     int(10) unsigned    not null auto_increment,
+  procedure_id                    int(10) unsigned    not null,
+  drawing_id                      int(10) unsigned    not null,
+  constraint blood_donations_pk primary key (donation_id),
+  constraint blood_donations_f1 foreign key (procedure_id) references procedures(procedure_id),
+  constraint blood_donations_f2 foreign key (drawing_id) references blood_drawings(drawing_id)
 );
 
-alter table BLOOD_DONATIONS comment 'blood donations of the hospital';
+alter table blood_drawings comment 'blood donations of the hospital';

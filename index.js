@@ -5,19 +5,22 @@ var app = express(),
 const mysql = require('mysql');
 var pool  = mysql.createPool({
   connectionLimit : 10,
-  host            : 'example.org',
-  user            : 'bob',
-  password        : 'secret',
-  database        : 'my_db'
-});
- 
-pool.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-  if (error) throw error;
-  console.log('The solution is: ', results[0].solution);
+  host            : 'freedb.tech',
+  user            : 'freedbtech_dbaduser',
+  password        : 'dbad_user',
+  database        : 'freedbtech_dbad'
 });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get('/api/countries', (req, res) => {
+  pool.query('call proc_get_countries(null)', function (error, results, fields) {
+    if (error) throw error;
+    console.log('result: ', results);
+    res.json(results);
+  });
+});
 
 app.get("/", function(request, response) {
 	response.send("Hello World!");

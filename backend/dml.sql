@@ -1,512 +1,1329 @@
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_countries_save
-(
-	in i_country_id                      int(10) unsigned,
-  in i_name                            varchar(250),
-  in i_state                           varchar(1)    
-)
-
-begin
-	if i_country_id is null then
-		insert into countries(name, state)
-		values (i_name, i_state);
-	else
-		update countries 
-			set name = i_name,
-					state = i_state
-			where country_id = i_country_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_countries
-(
-	in i_country_id int(10)
-)
-begin
-	select * from countries t
-	where (i_country_id is null or t.country_id = i_country_id);
-end//
-
-delimiter ;
-
-
-/*-- region*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_regions_save
-(
-	in i_region_id                       int(10),
-  in i_name                            varchar(250),
-  in i_country_id											 int(10),
-  in i_state                           varchar(1)    
-)
-
-begin
-	if i_region_id is null then
-		insert into regions(name, country_id, state)
-		values (i_name, i_country_id, i_state);
-	else
-		update regions 
-			set name = i_name,
-					country_id = i_country_id,
-					state = i_state
-			where region_id = i_region_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_regions
-(
-	in i_region_id int(10)
-)
-begin
-	select * from regions t
-	where (i_region_id is null or t.region_id = i_region_id);
-end//
-
-delimiter ;
-
-
-/*-- presons*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_persons_save
-(
-	i_PERSON_ID                       int(10) ,
-  i_FIRST_NAME                      varchar(250),
-  i_LAST_NAME                       varchar(250),
-  i_MIDDLE_NAME                     varchar(250),
-  i_PASSPORT_NUMBER                 varchar(250),
-  i_DATE_OF_BIRTH                   datetime,
-  i_PLACE_OF_BIRTH                  int(10) ,
-  i_GENDER                          varchar(1),
-  i_REGION_ID                       int(10) ,
-  i_ADDRESS                         varchar(250),
-  i_PHONE                           varchar(250),
-  i_EMAIL                           varchar(250)    
-)
-begin
-	if i_PERSON_ID is null then
-		insert into persons(first_name, last_name, middle_name, passport_number, 
-												date_of_birth, place_of_birth, gender, region_id, address, 
-												phone, email)
-		values (i_FIRST_NAME, i_LAST_NAME, i_MIDDLE_NAME, i_PASSPORT_NUMBER, 
-						i_DATE_OF_BIRTH, i_PLACE_OF_BIRTH, i_GENDER, i_REGION_ID, i_ADDRESS, i_PHONE, 
-						i_EMAIL);
-	else
-		update persons 
-			set FIRST_NAME      = i_FIRST_NAME,
-					LAST_NAME       = i_LAST_NAME,
-					MIDDLE_NAME     = i_MIDDLE_NAME,
-					PASSPORT_NUMBER = i_PASSPORT_NUMBER,
-					DATE_OF_BIRTH   = i_DATE_OF_BIRTH,
-					PLACE_OF_BIRTH  = i_PLACE_OF_BIRTH,
-					GENDER          = i_GENDER,
-					REGION_ID       = i_REGION_ID,
-					ADDRESS         = i_ADDRESS,
-					PHONE           = i_PHONE,
-					EMAIL           = i_EMAIL
-			where person_id = i_person_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_persons
-(
-	in i_person_id int(10)
-)
-begin
-	select * from persons t
-	where (i_person_id is null or t.person_id = i_person_id);
-end//
-
-delimiter ;
-
-
-/*-- blood groups*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_blood_groups_save
-(
-	in i_blood_group_id                  int(10),
-  in i_name                            varchar(250)
-)
-
-begin
-	if i_blood_group_id is null then
-		insert into blood_groups(name)
-		values (i_name);
-	else
-		update blood_groups 
-			set name = i_name
-			where blood_group_id = i_blood_group_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_blood_groups
-(
-	in i_blood_group_id int(10)
-)
-begin
-	select * from blood_groups t
-	where (i_blood_group_id is null or t.blood_group_id = i_blood_group_id);
-end//
-
-delimiter ;
-
-
-/*-- hospitals*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_hospitals_save
-(
-	i_HOSPITAL_ID                     int(10),
-	i_NAME                            varchar(250),
-	i_REGION_ID                       int(10),
-	i_ADDRESS                         varchar(250),
-	i_PHONE                           varchar(250),
-	i_FAX                             varchar(250),
-	i_STATE                           varchar(1)      
-)
-begin
-	if i_HOSPITAL_ID is null then
-		insert into hospitals(NAME, REGION_ID, ADDRESS, PHONE, 
-													FAX, STATE)
-		values (i_name, i_REGION_ID ,i_ADDRESS, i_PHONE, i_FAX, i_STATE);
-	else
-		update hospitals 
-			set name = i_name,
-				  REGION_ID	= i_REGION_ID,
-					ADDRESS  	= i_ADDRESS,
-					PHONE    	= i_PHONE,
-					FAX      	= i_FAX,
-					STATE    	= i_STATE
-			where hospital_id = i_hospital_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_hospitals
-(
-	in i_hospital_id int(10)
-)
-begin
-	select * from hospitals t
-	where (i_hospital_id is null or t.hospital_id = i_hospital_id);
-end//
-
-delimiter ;
-
-
-/*-- employees*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_employees_save
-(
-	i_employee_id               		  int(10),
-  i_PERSON_ID                       int(10),
-	i_HOSPITAL_ID                     int(10),
-	i_JOB_TITLE                       varchar(250),    
-	i_START_DATE                      datetime,        
-	i_END_DATE                        datetime,
-	i_SALARY                          varchar(250),  
-	i_STATE                           varchar(1)      
-)
-begin
-	if i_employee_id is null then
-		insert into employees(PERSON_ID, HOSPITAL_ID, JOB_TITLE, start_date,
-													END_DATE, SALARY, STATE)
-		values (i_PERSON_ID, i_HOSPITAL_ID, i_JOB_TITLE, i_START_DATE, 
-						i_END_DATE, i_SALARY, i_STATE);
-	else
-		update employees 
-			set PERSON_ID  	= i_PERSON_ID,
-					HOSPITAL_ID	= i_HOSPITAL_ID,
-					JOB_TITLE  	= i_JOB_TITLE,
-					START_DATE 	= i_START_DATE,
-					END_DATE   	= i_END_DATE,
-					SALARY     	= i_SALARY,
-					STATE      	= i_STATE
-			where employee_id = i_employee_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_employees
-(
-	in i_employee_id int(10)
-)
-begin
-	select * from employees t
-	where (i_employee_id is null or t.employee_id = i_employee_id);
-end//
-
-delimiter ;
-
-
-/*-- PROCEDURE_TYPES*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_procedure_types_save
-(
-	in i_procedure_type_id                  int(10),
-  in i_name                            varchar(250)
-)
-
-begin
-	if i_procedure_type_id is null then
-		insert into procedure_types(name)
-		values (i_name);
-	else
-		update procedure_types 
-			set name = i_name
-			where procedure_type_id = i_procedure_type_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_procedure_types
-(
-	in i_procedure_type_id int(10)
-)
-begin
-	select * from procedure_types t
-	where (i_procedure_type_id is null or t.procedure_type_id = i_procedure_type_id);
-end//
-
-delimiter ;
-
-
-/*-- procedures*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_procedures_save
-(
-	i_PROCEDURE_ID                    int(10),
-	i_PATIENT_ID                      int(10),
-	i_HOSPITAL_ID                     int(10),
-	i_PROCEDURE_TYPE_ID               int(10),
-	i_START_TIME                      datetime(6),
-	i_END_TIME                        datetime(6),
-	i_STATUS                          varchar(1)      
-)
-
-begin
-	if i_PROCEDURE_ID is null then
-		insert into procedures(PATIENT_ID, HOSPITAL_ID, PROCEDURE_TYPE_ID, 
-													 START_TIME, END_TIME, STATUS)
-		values (i_PATIENT_ID,
-						i_HOSPITAL_ID,
-						i_PROCEDURE_TYPE_ID,
-						i_START_TIME,
-						i_END_TIME,
-						i_STATUS);
-	else
-		update procedures 
-			set PATIENT_ID   			= i_PATIENT_ID,
-					HOSPITAL_ID      	= i_HOSPITAL_ID,
-					PROCEDURE_TYPE_ID	= i_PROCEDURE_TYPE_ID,
-					START_TIME       	= i_START_TIME,
-					END_TIME         	= i_END_TIME,
-					STATUS           	= i_STATUS
-			where procedure_id = i_procedure_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_procedures
-(
-	in i_procedure_id int(10)
-)
-begin
-	select * from procedures t
-	where (i_procedure_id is null or t.procedure_id = i_procedure_id);
-end//
-
-delimiter ;
-
-/*-- PROCEDURE DOCTORS*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_procedure_doctors_save
-(
-	i_PROCEDURE_ID                    int(10),
-	i_DOCTOR_ID                       int(10),
-	i_DOCTOR_ROLE                     varchar(250),    
-	i_START_TIME                      datetime(6),
-	i_END_TIME                        datetime(6),
-	i_STATUS                          varchar(1)      
-)
-begin
-	if i_DOCTOR_ID is null then
-		insert into procedure_doctors(procedure_id, DOCTOR_ROLE, START_TIME, 
-																	END_TIME, STATUS)
-		values (i_procedure_id,
-						i_DOCTOR_ROLE,
-						i_START_TIME, 
-						i_END_TIME,   
-						i_STATUS);
-	else
-		update procedure_doctors 
-			set DOCTOR_ROLE = i_DOCTOR_ROLE,
-					START_TIME  = i_START_TIME,
-					END_TIME    = i_END_TIME,
-					STATUS      = i_STATUS
-			where procedure_id = i_procedure_id
-					  and doctor_id = i_doctor_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_procedure_doctors
-(
-	in i_procedure_id int(10),
-	in i_doctor_id int(10)
-)
-begin
-	select * from procedure_doctors t
-	where (i_procedure_id is null and i_doctor_id is null or t.procedure_id = i_procedure_id
-					  									and t.doctor_id = i_doctor_id);
-end// 
-
-delimiter ;
-
-
-/*-- PROCEDURE drawings*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_blood_drawings_save
-(
-	i_DRAWING_ID                      int(10),
-	i_PROCEDURE_ID                    int(10),
-	i_BLOOD_GROUP_ID                  int(10),
-	i_AMOUNT                          int(10),
-	i_EXPIRY_DATE                     datetime,        
-	i_STATUS                          varchar(1)         
-)
-begin
-	if i_DRAWING_ID is null then
-		insert into blood_drawings(PROCEDURE_ID, BLOOD_GROUP_ID, 
-															 AMOUNT, EXPIRY_DATE, STATUS)
-		values (i_PROCEDURE_ID,  
-						i_BLOOD_GROUP_ID,
-						i_AMOUNT,        
-						i_EXPIRY_DATE,   
-						i_STATUS);
-	else
-		update blood_drawings 
-			set BLOOD_GROUP_ID = i_BLOOD_GROUP_ID,
-					AMOUNT         = i_AMOUNT,
-					EXPIRY_DATE    = i_EXPIRY_DATE,
-					STATUS         = i_STATUS
-			where drawing_id = i_DRAWING_ID
-					  and procedure_id = i_procedure_id;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_blood_drawings
-(
-	in i_DRAWING_ID int(10),
-	in i_procedure_id int(10)
-)
-begin
-	select * from blood_drawings t
-	where (drawing_id is null and procedure_id is null or t.drawing_id = i_DRAWING_ID
-					  								and t.procedure_id = i_procedure_id);
-end//
-
-delimiter ;
-
-
-/*-- PROCEDURE drawings*/
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_blood_donations_save
-(
-	i_DONATION_ID                     int(10),
-	i_PROCEDURE_ID                    int(10),
-	i_DRAWING_ID                      int(10)     
-)
-begin
-	if i_DONATION_ID is null then
-		insert into blood_donations(procedure_id, drawing_id)
-		values (i_PROCEDURE_ID,  
-						i_drawing_ID);
-	else
-		update blood_donations 
-			set procedure_id = i_procedure_id,
-					drawing_id = i_drawing_ID
-			where donation_id = i_DONATION_ID;
-	end if;
-end//
-
-delimiter ;
-
-
-use freedbtech_dbad;
-delimiter //
-create procedure proc_get_blood_donations
-(
-	in i_donation_id int(10)
-)
-begin
-	select * from blood_donations t
-	where (i_donation_id is null or t.donation_id = i_donation_id);
-end//
-
-delimiter ;
+-- --------------------------------------------------------------------------------------------------
+-- COUNTRIES
+-- --------------------------------------------------------------------------------------------------
+insert into countries (name, state) values ('Uzbekistan', 'A');
+insert into countries (name, state) values ('Kazakhstan', 'A');
+
+-- --------------------------------------------------------------------------------------------------
+-- REGIONS
+-- --------------------------------------------------------------------------------------------------
+-- Uzbekistan
+insert into regions (name, country_id, state) values ('Andijan', 1, 'A');
+insert into regions (name, country_id, state) values ('Bukhara', 1, 'A');
+insert into regions (name, country_id, state) values ('Fergana', 1, 'A');
+insert into regions (name, country_id, state) values ('Jizzakh', 1, 'A');
+insert into regions (name, country_id, state) values ('Urgench', 1, 'A');
+insert into regions (name, country_id, state) values ('Namangan', 1, 'A');
+insert into regions (name, country_id, state) values ('Navoiy', 1, 'A');
+insert into regions (name, country_id, state) values ('Qashqadaryo', 1, 'A');
+insert into regions (name, country_id, state) values ('Samarkand', 1, 'A');
+insert into regions (name, country_id, state) values ('Sirdaryo', 1, 'A');
+insert into regions (name, country_id, state) values ('Surxondaryo', 1, 'A');
+insert into regions (name, country_id, state) values ('Tashkent', 1, 'A');
+insert into regions (name, country_id, state) values ('Karakalpakstan', 1, 'A');
+
+-- Kazakhstan
+insert into regions (name, country_id, state) values ('Akmola', 2, 'A');
+insert into regions (name, country_id, state) values ('Aktobe', 2, 'A');
+insert into regions (name, country_id, state) values ('Almaty', 2, 'A');
+insert into regions (name, country_id, state) values ('Nur-Sultan', 2, 'A');
+insert into regions (name, country_id, state) values ('Atyrau', 2, 'A');
+insert into regions (name, country_id, state) values ('Baikonur', 2, 'A');
+insert into regions (name, country_id, state) values ('Jambyl', 2, 'A');
+insert into regions (name, country_id, state) values ('Karaganda', 2, 'A');
+insert into regions (name, country_id, state) values ('Kostanay', 2, 'A');
+insert into regions (name, country_id, state) values ('Kyzylorda', 2, 'A');
+insert into regions (name, country_id, state) values ('Mangystau', 2, 'A');
+insert into regions (name, country_id, state) values ('North', 2, 'A');
+insert into regions (name, country_id, state) values ('Pavlodar', 2, 'A');
+insert into regions (name, country_id, state) values ('Shymkent', 2, 'A');
+insert into regions (name, country_id, state) values ('Turkistan', 2, 'A');
+
+-- --------------------------------------------------------------------------------------------------
+-- PERSONS
+-- --------------------------------------------------------------------------------------------------
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Burr', 'Hanaford', null, '63-528-4349', '1944-10-06', 5, 'M', 5, '04051 Rusk Place', '265-128-9373', 'banstey0@t.co');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Brigid', 'Towne', 'Phair', '34-323-6584', '1956-10-14', 4, 'F', 25, '949 Corscot Center', '357-285-3095', 'bphair1@bbc.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dewey', 'Skittrall', 'Devanny', '13-426-7973', '1944-06-29', 18, 'M', 9, '759 Sundown Circle', '846-285-7302', 'ddevanny2@cdbaby.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hy', 'Chopy', 'St. Leger', '29-515-1676', '1984-08-09', 6, 'M', 16, '46253 Lakewood Gardens Avenue', '354-893-9021', 'hstleger3@nationalgeographic.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Clarke', 'Stock', 'Karel', '29-638-4276', '2006-06-28', 1, 'M', 1, '014 Bultman Place', '564-611-0668', 'ckarel4@examiner.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Matthaeus', 'Fitchet', 'Lumbley', '47-043-8522', '1974-05-10', 21, 'M', 1, '3 Farragut Point', '466-727-1096', 'mlumbley5@psu.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Carlyn', 'Elnaugh', 'Brabben', '09-535-9380', '1984-03-24', 21, 'F', 10, '6161 Magdeline Place', '241-373-1159', 'cbrabben6@sohu.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Andee', 'Geibel', 'Duinbleton', '36-908-4440', '1982-04-10', 21, 'F', 16, '50 West Trail', '694-739-9981', 'aduinbleton7@arstechnica.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kris', 'Hussell', 'O''Curran', '57-989-7048', '1968-06-09', 8, 'M', 18, '09784 South Way', '159-183-8256', 'kocurran8@php.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hailey', 'Cayle', 'O''Fihily', '08-636-5310', '1961-09-09', 5, 'M', 17, '39 Farragut Terrace', '749-795-2872', 'hofihily9@google.fr');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hollis', 'St Louis', 'Brand', '14-415-2673', '2009-03-03', 13, 'M', 21, '33 Golf Center', '760-442-6120', 'hbranda@ox.ac.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Evan', 'Bockh', 'Capel', '05-157-3949', '2009-08-17', 22, 'M', 7, '29602 Dayton Junction', '760-866-5490', 'ecapelb@infoseek.co.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Derward', 'Asbery', null, '08-414-9247', '1987-08-09', 3, 'M', 2, '417 Canary Lane', '368-108-2952', 'dchealesc@infoseek.co.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ortensia', 'Zaple', null, '31-143-9214', '1950-06-22', 16, 'F', 7, '9 Service Terrace', '723-196-5479', 'ogonnelyd@nps.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Alejandro', 'Hawsby', 'Corfield', '50-341-0532', '1969-03-10', 1, 'M', 5, '88 Vahlen Court', '230-112-2021', 'acorfielde@kickstarter.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Linus', 'Stern', 'Jaszczak', '23-996-6956', '1944-11-21', 26, 'M', 13, '5653 Ridgeview Trail', '882-776-1620', 'ljaszczakf@bizjournals.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Melisenda', 'Maughan', 'Brine', '56-077-0548', '1951-04-14', 7, 'F', 6, '1 Straubel Parkway', '468-373-1507', 'mbrineg@cisco.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jenda', 'Pagan', null, '76-387-5886', '1988-11-06', 26, 'F', 23, '1 Novick Avenue', '170-547-5935', 'jtottonh@economist.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Mersey', 'Ranken', null, '73-176-2175', '1951-01-08', 13, 'F', 10, '05060 Mayfield Road', '321-640-8782', 'mgarciai@uiuc.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Meriel', 'Mineghelli', 'Sidary', '18-845-1245', '1962-11-23', 3, 'F', 23, '3 Towne Court', '616-982-2734', 'msidaryj@msn.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jaquelin', 'Flanigan', 'Collyns', '86-920-1262', '1989-09-20', 4, 'F', 25, '9986 Nova Lane', '537-503-7062', 'jcollynsk@studiopress.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Almeria', 'Marrison', null, '23-303-1931', '2009-11-22', 6, 'F', 28, '2 Sachs Point', '756-570-8657', 'abinnesl@amazon.co.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Keith', 'Tibbs', 'Sallter', '59-648-3727', '1944-09-17', 10, 'M', 18, '7979 Hudson Crossing', '957-377-6870', 'ksallterm@facebook.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lucinda', 'Scoggins', 'Seif', '65-612-9853', '2004-04-08', 4, 'F', 1, '5 Holy Cross Hill', '743-145-9029', 'lseifn@youtu.be');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lee', 'Donnersberg', 'Pickavance', '87-661-6789', '2001-12-12', 28, 'F', 22, '86 Anthes Junction', '888-386-0795', 'lpickavanceo@apache.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Winonah', 'Coulling', 'Lismer', '77-645-3750', '1973-05-01', 19, 'F', 8, '5203 Morrow Crossing', '243-341-6982', 'wlismerp@shop-pro.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Maxy', 'Tottie', 'Peterson', '48-061-6005', '1958-04-15', 20, 'F', 18, '6 Spaight Avenue', '928-274-4328', 'mpetersonq@apple.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Duky', 'Simes', null, '60-703-4453', '1965-09-12', 6, 'M', 22, '0 Sherman Lane', '780-321-8503', 'dzamboniarir@linkedin.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gabriel', 'Schulze', null, '20-399-6775', '1945-12-16', 17, 'F', 12, '38 Blackbird Drive', '650-513-6901', 'gbungeys@skype.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jocelyne', 'Cristofano', 'Neal', '34-074-7056', '1973-02-28', 25, 'F', 28, '9039 Kipling Junction', '401-220-6026', 'jnealt@multiply.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gratiana', 'Kitchingman', 'Alenichicov', '32-372-6992', '1962-08-10', 1, 'F', 2, '99 Declaration Center', '467-195-9752', 'galenichicovu@tmall.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Adriano', 'Tookill', 'Caldwall', '59-690-4798', '1975-12-04', 28, 'M', 14, '20 Meadow Ridge Junction', '663-585-0591', 'acaldwallv@e-recht24.de');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Sydelle', 'Hinckesman', null, '97-344-4229', '1959-07-31', 5, 'F', 16, '0895 Harbort Park', '658-344-1775', 'sallsow@nhs.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Betteanne', 'Salvatore', 'Shovel', '30-961-3624', '1976-09-13', 26, 'F', 27, '1 Jay Circle', '897-346-4710', 'bshovelx@tripod.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Selena', 'Sinnat', 'Grimston', '21-738-9656', '1953-11-26', 6, 'F', 23, '592 Pepper Wood Lane', '323-762-2242', 'sgrimstony@earthlink.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Arni', 'Gilbride', 'Thurlby', '46-417-9568', '2000-03-28', 19, 'M', 4, '787 Darwin Road', '817-411-8768', 'athurlbyz@networksolutions.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Idaline', 'Boyn', 'Klaaassen', '14-858-7460', '1962-04-13', 1, 'F', 4, '4 Moose Plaza', '751-371-1031', 'iklaaassen10@un.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Netti', 'Kneel', 'Waldron', '75-552-7942', '1949-04-11', 7, 'F', 9, '16965 Hooker Junction', '530-528-9443', 'nwaldron11@indiatimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Mikey', 'Petrollo', 'Gilpin', '36-729-8465', '1994-02-22', 1, 'M', 23, '7 Arapahoe Hill', '224-817-3711', 'mgilpin12@parallels.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Patrica', 'Colqueran', 'Cabrara', '89-075-9845', '1952-04-16', 9, 'F', 20, '7647 Dorton Junction', '253-489-2829', 'pcabrara13@nps.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dede', 'Kington', 'Skett', '77-554-2252', '1983-10-05', 14, 'F', 8, '5 Sunfield Place', '471-508-9288', 'dskett14@sina.com.cn');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Constanta', 'Petrescu', 'Scurry', '81-821-6099', '1954-06-21', 11, 'F', 16, '57 Holmberg Avenue', '523-926-4568', 'cscurry15@ted.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jerry', 'Reinbach', 'Coulsen', '87-968-5062', '1989-07-20', 7, 'M', 15, '151 Sugar Court', '206-466-5093', 'jcoulsen16@smugmug.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ludwig', 'Goggen', 'Dohmer', '63-881-0150', '1957-05-29', 23, 'M', 26, '29229 Westend Center', '743-456-6814', 'ldohmer17@ox.ac.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ellsworth', 'Loude', null, '91-227-1772', '1992-07-21', 25, 'M', 21, '35804 Manufacturers Point', '603-755-9998', 'egoldman18@so-net.ne.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Robert', 'Rozea', null, '39-377-0496', '1995-11-12', 8, 'M', 13, '4281 Brown Hill', '480-739-0340', 'rskerme19@chicagotribune.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Madalena', 'Stoggell', null, '40-397-0010', '1971-12-31', 11, 'F', 5, '2981 Harbort Hill', '958-477-8458', 'mebunoluwa1a@trellian.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Amalee', 'McIlherran', 'Siebart', '89-348-2838', '1962-08-03', 14, 'F', 7, '276 Monument Crossing', '502-293-5342', 'asiebart1b@google.com.au');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gottfried', 'Calcott', 'Nesby', '87-921-7290', '2006-04-08', 14, 'M', 15, '8917 Texas Court', '928-138-8602', 'gnesby1c@dropbox.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Monte', 'Boyat', 'Feirn', '58-060-2331', '1952-10-21', 3, 'M', 25, '13 Arrowood Road', '493-989-5473', 'mfeirn1d@yahoo.co.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ely', 'Manz', null, '62-871-0958', '1947-03-23', 12, 'M', 2, '6928 Banding Point', '214-270-9328', 'erobun1e@rambler.ru');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Vachel', 'Antyukhin', 'Truitt', '02-395-0475', '1984-08-30', 1, 'M', 23, '7824 Chinook Plaza', '857-584-5814', 'vtruitt1f@wikispaces.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ephrem', 'Vanni', 'Aslam', '64-587-5667', '2006-05-06', 6, 'M', 9, '03174 Eggendart Plaza', '961-875-0427', 'easlam1g@mashable.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Birk', 'Crackett', 'Torbet', '45-245-2739', '1940-09-29', 21, 'M', 7, '83366 Elmside Crossing', '195-163-0085', 'btorbet1h@clickbank.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hedvig', 'MacCollom', 'Loveless', '70-023-3538', '1992-07-26', 21, 'F', 20, '04770 Sunnyside Junction', '823-730-3758', 'hloveless1i@indiatimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Leicester', 'Anelay', 'Mantle', '34-744-1140', '1974-11-29', 1, 'M', 15, '88219 Holy Cross Hill', '703-179-5410', 'lmantle1j@oaic.gov.au');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Geoffrey', 'Andrewartha', 'Undy', '54-914-4911', '1988-10-21', 5, 'M', 25, '316 Melrose Parkway', '809-114-7783', 'gundy1k@japanpost.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Maurice', 'Theakston', 'Fantonetti', '76-144-4584', '1996-02-02', 23, 'M', 26, '91 Warner Plaza', '341-859-5013', 'mfantonetti1l@blogs.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Sascha', 'Marquand', null, '83-454-4824', '1953-04-12', 12, 'F', 11, '0892 Packers Parkway', '559-360-3769', 'sblaxill1m@sfgate.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Tymon', 'Alderman', 'Percy', '53-271-9187', '1957-04-21', 8, 'M', 17, '328 Hoepker Center', '369-611-0218', 'tpercy1n@twitter.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Homere', 'Wraighte', 'Pollastrone', '04-575-3099', '1943-05-26', 26, 'M', 8, '462 Arizona Point', '399-907-6141', 'hpollastrone1o@over-blog.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ferrell', 'Bracco', 'Tolemache', '48-745-1128', '1955-04-19', 16, 'M', 16, '9 1st Way', '249-938-7108', 'ftolemache1p@senate.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Leelah', 'Guidi', 'Wintle', '90-487-5214', '1971-08-18', 26, 'F', 16, '5788 Scoville Lane', '189-900-4333', 'lwintle1q@smugmug.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kin', 'Loosely', 'Gridley', '03-223-8388', '1973-08-09', 14, 'M', 25, '3592 John Wall Parkway', '762-386-0809', 'kgridley1r@wufoo.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Matthieu', 'Scoullar', 'Sodory', '61-103-5937', '1981-03-02', 2, 'M', 6, '27871 Carpenter Lane', '213-153-8764', 'msodory1s@geocities.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Arlana', 'Mallison', null, '42-401-3263', '1979-02-08', 25, 'F', 15, '41323 Susan Court', '289-673-4198', 'aporch1t@yellowbook.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hieronymus', 'Maclean', 'Juppe', '14-828-1172', '1953-09-24', 8, 'M', 3, '217 Spaight Lane', '982-143-1075', 'hjuppe1u@ucla.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Onofredo', 'Bloxsome', null, '67-917-9034', '1988-01-22', 3, 'M', 7, '6 Main Center', '358-428-3949', 'obaylis1v@blog.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Randie', 'Muriel', 'Robben', '86-249-6286', '1992-07-14', 7, 'F', 4, '9455 Lakeland Court', '980-508-6332', 'rrobben1w@cdc.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dion', 'Balchen', 'MacGiffin', '25-997-4397', '1965-10-02', 19, 'F', 23, '992 Fulton Point', '484-428-0734', 'dmacgiffin1x@newsvine.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Fitz', 'Matzen', 'Tummasutti', '64-346-1227', '1938-11-01', 2, 'M', 14, '35792 Fisk Place', '912-258-2876', 'ftummasutti1y@ocn.ne.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Truda', 'Dollman', 'Poytress', '93-092-5857', '1979-02-14', 14, 'F', 25, '1595 Northport Lane', '634-704-9532', 'tpoytress1z@vkontakte.ru');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ann', 'McDirmid', 'Iannetti', '14-020-1033', '1982-07-02', 21, 'F', 21, '542 Mcguire Crossing', '459-174-3622', 'aiannetti20@dagondesign.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dewain', 'Beavington', 'Dewsnap', '77-201-3163', '1949-01-04', 8, 'M', 11, '2533 Jackson Alley', '570-525-8213', 'ddewsnap21@163.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Salvador', 'Burdikin', 'Vala', '58-792-8583', '1960-04-03', 5, 'M', 7, '7391 Ronald Regan Park', '806-389-9686', 'svala22@dell.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ailey', 'Szubert', null, '50-733-8466', '1981-07-12', 14, 'F', 16, '0094 Sachtjen Junction', '279-519-4409', 'atilt23@google.cn');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dun', 'Molyneux', 'Cromwell', '99-124-9022', '1955-04-01', 24, 'M', 2, '4 Springs Way', '551-504-7728', 'dcromwell24@meetup.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ulla', 'Dolden', 'Mitkin', '10-244-0850', '1960-01-07', 28, 'F', 25, '86334 Drewry Place', '237-703-6167', 'umitkin25@census.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Mathias', 'Dabinett', 'Attenbarrow', '35-527-1152', '2004-03-18', 1, 'M', 27, '0701 Canary Junction', '898-566-4988', 'mattenbarrow26@discuz.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Rachael', 'Janikowski', null, '83-695-7965', '1966-02-20', 28, 'F', 19, '57884 Boyd Court', '705-510-5992', 'rsymonds27@arizona.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marcelo', 'Ladley', 'Bartunek', '13-524-6596', '1988-11-25', 3, 'M', 11, '23 Northland Street', '899-404-0347', 'mbartunek28@sakura.ne.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('El', 'Dalyell', 'Farncomb', '89-288-3433', '1946-08-25', 17, 'M', 12, '0834 Buhler Trail', '204-580-1151', 'efarncomb29@buzzfeed.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Northrop', 'Hailey', 'McAne', '50-595-5759', '1940-06-20', 9, 'M', 10, '1816 Crowley Center', '778-969-3099', 'nmcane2a@godaddy.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Alf', 'Thal', 'Reoch', '60-648-1974', '1974-10-14', 12, 'M', 1, '1363 Morning Avenue', '867-399-5108', 'areoch2b@hexun.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Elysee', 'Wallbrook', 'McCurry', '70-007-8580', '1962-09-22', 25, 'F', 20, '6 Jana Center', '282-582-3044', 'emccurry2c@washington.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dennison', 'Smallridge', 'Hayman', '58-217-4231', '1969-07-05', 3, 'M', 3, '4754 Coleman Street', '759-458-3563', 'dhayman2d@mlb.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Humphrey', 'Mateev', 'Daveley', '42-287-0551', '1993-10-03', 27, 'M', 9, '977 Red Cloud Road', '860-855-5036', 'hdaveley2e@1und1.de');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Sybil', 'Naulty', 'Bussell', '17-266-8327', '1974-02-11', 13, 'F', 6, '47094 Blaine Avenue', '754-356-0058', 'sbussell2f@indiatimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Agata', 'Prewett', 'Strevens', '53-830-9975', '1945-05-30', 13, 'F', 18, '1809 Dovetail Drive', '349-376-4237', 'astrevens2g@etsy.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Cecile', 'Clardge', 'Gainfort', '29-403-9737', '2006-01-02', 4, 'F', 23, '0347 Longview Road', '880-292-3666', 'cgainfort2h@etsy.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Prentice', 'Ince', 'De Carlo', '96-618-1080', '1986-12-24', 16, 'M', 26, '1827 Dakota Place', '101-787-3596', 'pdecarlo2i@psu.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gwynne', 'Hains', null, '95-620-1310', '1953-09-08', 15, 'F', 17, '5 Carioca Crossing', '679-849-2020', 'gsherwill2j@nytimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Zenia', 'Westell', 'Hauch', '77-221-5179', '1966-02-16', 3, 'F', 9, '677 Ridge Oak Pass', '356-500-3352', 'zhauch2k@pagesperso-orange.fr');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Emelita', 'Sex', 'Dungay', '59-997-6335', '2003-12-05', 24, 'F', 7, '0 Debs Avenue', '490-936-1780', 'edungay2l@merriam-webster.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Iago', 'Roskrug', null, '71-033-9548', '1953-06-06', 13, 'M', 12, '3243 Warrior Alley', '905-377-0773', 'ibamb2m@disqus.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ashlen', 'Carroll', 'Scallan', '75-772-6098', '1984-08-02', 6, 'F', 2, '65298 Golf Alley', '535-525-8251', 'ascallan2n@thetimes.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kristofor', 'Wasmuth', 'Habbershon', '11-014-6765', '1982-11-11', 11, 'M', 28, '0 Valley Edge Pass', '567-972-9984', 'khabbershon2o@ask.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Katey', 'Ellif', null, '26-053-5124', '1937-09-12', 12, 'F', 16, '15 Havey Crossing', '369-605-2747', 'kpursey2p@elpais.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Bruce', 'Shewon', 'MacCaffrey', '61-281-2324', '1991-07-13', 8, 'M', 10, '764 Straubel Circle', '453-892-3096', 'bmaccaffrey2q@bloglines.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Roi', 'Bruty', null, '41-360-7778', '1936-04-03', 15, 'M', 23, '5808 Bobwhite Road', '257-105-7578', 'rodgaard2r@washington.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Rheta', 'Philott', 'Durbann', '75-173-2857', '1943-02-11', 16, 'F', 24, '078 Logan Junction', '231-100-5053', 'rdurbann0@google.ru');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Grannie', 'Niesing', null, '49-207-2594', '1985-06-26', 28, 'M', 24, '67 Northview Park', '764-455-6540', 'gchaise1@woothemes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Retha', 'Lembcke', null, '86-747-0687', '1980-06-12', 9, 'F', 19, '443 Farmco Alley', '165-483-8575', 'rfidell2@goodreads.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Eli', 'Ionn', null, '12-981-7699', '2006-08-25', 11, 'M', 26, '05092 Schiller Junction', '999-479-4503', 'eboat3@gravatar.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Georgeta', 'Ellicott', null, '31-268-8367', '1944-05-26', 12, 'F', 3, '9 Debra Junction', '246-234-4871', 'givey4@ucoz.ru');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Andre', 'Higounet', 'Pheby', '68-454-6909', '1955-12-07', 8, 'M', 6, '14200 Gerald Terrace', '393-556-0307', 'apheby5@wix.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Fayina', 'Phlipon', 'Lamport', '99-670-5015', '2004-03-23', 4, 'F', 1, '6575 Northridge Way', '175-656-9648', 'flamport6@shop-pro.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Tiff', 'Boddington', 'Segrott', '51-751-9676', '1988-04-12', 2, 'F', 22, '619 Spohn Alley', '194-916-9949', 'tsegrott7@ebay.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Sid', 'Morad', null, '76-215-5878', '1959-10-06', 27, 'M', 24, '33 Dawn Crossing', '543-712-1445', 'slapping8@timesonline.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Barrie', 'Wisam', 'Grimm', '29-897-3583', '1977-02-18', 6, 'F', 19, '22744 Hoffman Plaza', '460-477-1066', 'bgrimm9@wikia.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ginger', 'Duligall', 'Penright', '81-303-6529', '2010-01-16', 13, 'F', 5, '64200 Mitchell Center', '364-275-5955', 'gpenrighta@squarespace.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Livvy', 'Gergus', 'Whisker', '52-319-6277', '1959-07-31', 27, 'F', 25, '63 Gerald Junction', '789-899-9057', 'lwhiskerb@baidu.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Myron', 'Clabburn', 'Melladew', '57-507-1844', '1979-05-09', 13, 'M', 9, '4 Continental Place', '741-199-2700', 'mmelladewc@salon.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lacie', 'Abramof', 'Forker', '05-769-6540', '1997-04-21', 28, 'F', 3, '626 Holmberg Plaza', '307-759-0845', 'lforkerd@com.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Cherlyn', 'Walker', null, '38-991-7821', '1997-01-24', 11, 'F', 24, '25 Heffernan Street', '187-792-2664', 'cluffe@discuz.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jeffie', 'Kinnoch', 'Loggie', '62-145-5071', '1997-07-20', 14, 'M', 13, '86 Gina Place', '428-130-1100', 'jloggief@imgur.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Demott', 'Storton', null, '73-746-3133', '1991-06-04', 9, 'M', 11, '14 Alpine Pass', '201-773-9305', 'dnorthamg@free.fr');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Myrvyn', 'Bucklan', 'Kuban', '37-517-7522', '1972-09-23', 12, 'M', 15, '92427 Farragut Crossing', '599-840-6236', 'mkubanh@sourceforge.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Shermie', 'Fortie', 'Rouke', '90-176-1072', '1980-07-12', 13, 'M', 24, '62 Shasta Lane', '275-380-6578', 'sroukei@linkedin.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Rozina', 'Lodewick', 'Husband', '31-100-2491', '1960-04-24', 22, 'F', 1, '98 Waxwing Circle', '935-625-9558', 'rhusbandj@washingtonpost.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hanan', 'Torregiani', 'Nickolls', '51-547-3414', '1939-02-03', 16, 'M', 27, '925 Burrows Trail', '551-582-2412', 'hnickollsk@yahoo.co.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Heddi', 'Grissett', 'Petrulis', '06-004-6584', '1999-03-16', 5, 'F', 14, '606 Michigan Avenue', '451-912-7319', 'hpetrulisl@ovh.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gert', 'Giacomazzo', 'Dugdale', '44-905-3674', '2011-01-03', 17, 'F', 5, '498 Shelley Trail', '132-458-8645', 'gdugdalem@technorati.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gordon', 'Wykes', null, '19-934-8549', '1997-10-09', 11, 'M', 16, '2 Valley Edge Drive', '160-150-2816', 'gfenixn@noaa.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Mignonne', 'O''Moylane', null, '73-216-0590', '1993-02-28', 9, 'F', 21, '90 Westerfield Park', '910-837-7707', 'mwinnardo@alexa.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ripley', 'Fairhead', 'Climie', '30-320-0663', '2004-04-18', 25, 'M', 11, '39884 Express Alley', '249-638-6870', 'rclimiep@msn.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lon', 'Greathead', 'Pettiford', '67-496-3991', '1948-02-22', 27, 'M', 26, '929 Dapin Drive', '454-457-7285', 'lpettifordq@bbb.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marya', 'Aldiss', 'Picken', '31-157-5753', '1939-03-31', 27, 'F', 3, '6929 Rutledge Way', '950-157-7872', 'mpickenr@timesonline.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Annissa', 'Constant', 'Azam', '21-902-9704', '1956-04-01', 24, 'F', 24, '65687 Petterle Place', '271-419-5462', 'aazams@house.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Pennie', 'Scemp', 'Fawks', '53-252-6271', '1985-01-05', 28, 'M', 26, '64023 Jana Parkway', '617-126-9479', 'pfawkst@microsoft.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Valentina', 'Larvent', 'Whawell', '05-973-4462', '1945-09-06', 22, 'F', 12, '3 Algoma Trail', '500-530-5881', 'vwhawellu@hostgator.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jodie', 'Asbrey', 'Hallwell', '64-121-0748', '1956-09-10', 9, 'F', 5, '6723 Montana Point', '669-361-8998', 'jhallwellv@vistaprint.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marthena', 'Whalebelly', null, '08-563-9806', '1954-06-25', 1, 'F', 12, '979 Melody Avenue', '373-221-5257', 'madolfsonw@google.com.hk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Brannon', 'O''Connell', null, '79-041-9037', '1943-11-03', 22, 'M', 25, '784 Havey Drive', '647-475-9597', 'bokendenx@ebay.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Brier', 'Walden', 'Yanson', '57-774-8617', '2008-03-23', 6, 'F', 17, '2 Summer Ridge Circle', '957-391-0143', 'byansony@canalblog.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Winston', 'Benterman', 'Keyho', '30-436-7645', '1994-07-20', 8, 'M', 6, '8475 Stoughton Hill', '174-544-4571', 'wkeyhoz@mayoclinic.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Sarette', 'Tarry', 'Timbridge', '68-149-1777', '1959-09-19', 23, 'F', 1, '5418 Roth Circle', '278-988-3555', 'stimbridge10@wp.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Aila', 'Podmore', null, '20-422-7821', '1980-05-09', 25, 'F', 16, '9112 Sundown Alley', '132-905-8176', 'aroxburch11@elegantthemes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Celestine', 'Deason', null, '04-983-6540', '1946-03-06', 4, 'F', 8, '8 Kipling Park', '389-708-6195', 'cyglesias12@soup.io');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lucias', 'Bracher', 'Jendrusch', '49-822-1065', '2009-11-29', 8, 'M', 25, '7685 Fallview Park', '798-530-4026', 'ljendrusch13@quantcast.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Margaret', 'Jays', 'Chopping', '30-556-8794', '1941-11-29', 5, 'F', 10, '6456 Bellgrove Circle', '665-408-3892', 'mchopping14@washingtonpost.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marsiella', 'Chaplyn', null, '51-464-0641', '1959-08-02', 5, 'F', 2, '77429 Granby Trail', '594-496-3383', 'mwasselin15@ibm.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ennis', 'Sides', null, '60-934-0732', '1952-02-04', 17, 'M', 27, '25471 Briar Crest Avenue', '572-823-9392', 'emcquarrie16@geocities.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Chuck', 'Allcroft', null, '72-578-2235', '1939-06-17', 26, 'M', 19, '87162 Burning Wood Park', '115-132-4846', 'caindrais17@nationalgeographic.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jocelyne', 'Selvester', 'Colvine', '47-439-3913', '1955-10-16', 19, 'F', 17, '85601 Harbort Trail', '244-785-4047', 'jcolvine18@huffingtonpost.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Stan', 'Durnill', null, '55-041-2935', '1966-08-05', 16, 'M', 14, '484 Miller Crossing', '806-529-8069', 'sfripp19@icq.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Tiphanie', 'Lockwood', null, '98-416-6693', '1971-01-06', 23, 'F', 13, '169 Basil Junction', '338-594-8004', 'twhayman1a@freewebs.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ernesta', 'Nestoruk', 'Ingham', '59-263-5943', '1967-01-29', 1, 'F', 12, '91 Summer Ridge Crossing', '364-197-1183', 'eingham1b@newsvine.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marmaduke', 'Walak', null, '55-065-4927', '1984-03-31', 6, 'M', 10, '768 American Ash Center', '248-496-2437', 'mbentke1c@squidoo.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Huberto', 'Erskin', 'Woolvett', '56-581-4182', '2008-05-17', 15, 'M', 2, '736 Melvin Terrace', '292-961-3968', 'hwoolvett1d@cam.ac.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Stearn', 'Jamson', 'Fiddler', '88-281-8377', '1998-03-02', 14, 'M', 22, '4214 Forster Hill', '558-432-7143', 'sfiddler1e@dagondesign.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marcos', 'Kryszkiecicz', 'Esposi', '51-423-1789', '1973-05-02', 27, 'M', 17, '901 Crescent Oaks Hill', '912-308-1276', 'mesposi1f@slashdot.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Siobhan', 'Alston', null, '29-555-9064', '1987-12-03', 1, 'F', 21, '386 Ridgeview Parkway', '863-193-9619', 'selliman1g@usda.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Isaac', 'Cornil', null, '50-410-2923', '1946-11-22', 8, 'M', 16, '20 Dorton Plaza', '381-600-2578', 'iconws1h@buzzfeed.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Welch', 'Featherstonhalgh', 'Hackelton', '21-257-1053', '1987-08-09', 10, 'M', 4, '1 Kingsford Alley', '932-531-0812', 'whackelton1i@com.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Libbie', 'Veracruysse', 'Roussel', '48-600-7577', '1938-08-18', 16, 'F', 6, '419 Bluestem Drive', '581-253-7096', 'lroussel1j@time.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Reeva', 'Chesnut', 'Klimowski', '27-204-0697', '1984-06-29', 3, 'F', 17, '94 Fairview Center', '823-451-9882', 'rklimowski1k@trellian.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ysabel', 'Clausius', 'Shale', '09-283-7557', '1950-07-01', 21, 'F', 17, '3 Shopko Parkway', '486-744-1338', 'yshale1l@ed.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lefty', 'Barbrick', 'Raincin', '45-945-7187', '1966-02-20', 22, 'M', 12, '9049 Mccormick Plaza', '588-213-1848', 'lraincin1m@washingtonpost.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Albert', 'Rabley', 'Ondracek', '11-678-8123', '1979-10-28', 20, 'M', 22, '3415 Welch Place', '618-864-5489', 'aondracek1n@wsj.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jacquenetta', 'Castagneri', 'Catcherside', '81-104-9524', '1977-11-01', 5, 'F', 21, '72 Manufacturers Drive', '787-468-2142', 'jcatcherside1o@cbslocal.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Livvy', 'Hambling', 'Hancox', '83-087-8134', '1936-02-17', 11, 'F', 17, '6899 Ronald Regan Park', '761-523-9596', 'lhancox1p@omniture.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gilemette', 'Maha', 'Van der Veldt', '91-316-6465', '1955-04-19', 2, 'F', 23, '20 6th Road', '172-626-1750', 'gvanderveldt1q@illinois.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Tadd', 'Gallard', null, '43-417-9605', '1967-02-10', 3, 'M', 17, '87707 Nobel Street', '980-811-8625', 'twinspurr1r@is.gd');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gertrude', 'McDuffy', 'Jest', '11-990-2434', '1983-02-21', 14, 'F', 27, '2304 Carpenter Avenue', '307-110-1634', 'gjest1s@seattletimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Brucie', 'Creamer', 'Stones', '29-225-0171', '2005-03-12', 24, 'M', 1, '64 Tennessee Trail', '693-588-1759', 'bstones1t@google.nl');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lorie', 'Brammar', 'Renehan', '13-697-6947', '1990-03-07', 22, 'F', 4, '32863 Oak Valley Place', '597-310-6438', 'lrenehan1u@mapy.cz');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Nina', 'Izakov', 'Schuck', '23-663-7231', '1996-06-17', 9, 'F', 4, '94 Mallory Drive', '973-689-5112', 'nschuck1v@weather.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Brita', 'Labon', null, '64-142-3150', '1970-03-25', 9, 'F', 10, '3 Declaration Center', '510-995-9792', 'bcosgrave1w@dailymail.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Stanford', 'Danilyuk', 'Heady', '49-946-4630', '1949-08-20', 22, 'M', 16, '44906 Tomscot Parkway', '141-835-0193', 'sheady1x@macromedia.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Carlota', 'Forstall', 'Estabrook', '52-922-7040', '1947-05-20', 7, 'F', 8, '34670 Hallows Lane', '518-944-3227', 'cestabrook1y@springer.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Heindrick', 'Riquet', 'Colt', '40-008-1491', '1940-07-29', 28, 'M', 14, '251 Bunting Terrace', '912-648-3969', 'hcolt1z@behance.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Cam', 'Mickleburgh', 'Gunney', '45-707-1338', '1937-03-25', 9, 'F', 23, '42617 Pawling Center', '224-534-9306', 'cgunney20@wikispaces.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jeromy', 'Tompkinson', 'Bertlin', '46-111-1274', '1983-12-09', 7, 'M', 1, '3364 Sage Park', '684-283-9027', 'jbertlin21@cnet.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hugh', 'Vasquez', 'Robertot', '14-049-9967', '1978-11-19', 25, 'M', 2, '92413 Morning Place', '392-139-1703', 'hrobertot22@foxnews.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Merry', 'Myhan', 'Janatka', '24-913-5267', '1992-01-02', 4, 'M', 3, '3139 Loomis Hill', '617-694-8862', 'mjanatka23@cdbaby.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Inglis', 'Dymock', 'Cheers', '25-370-4580', '1973-04-02', 27, 'M', 11, '52 Oak Avenue', '929-918-7413', 'icheers24@discovery.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marietta', 'Brighty', 'Blinckhorne', '61-911-0629', '1992-03-07', 26, 'F', 24, '03026 Hermina Trail', '791-798-8783', 'mblinckhorne25@friendfeed.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Carlyn', 'Haughey', null, '07-841-1483', '1973-12-08', 2, 'F', 6, '570 Roth Road', '572-902-7344', 'cjames26@mac.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marcy', 'Ferber', null, '55-548-6943', '1976-04-12', 12, 'F', 8, '6 Moulton Junction', '717-176-3276', 'mmerida27@ebay.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Eugenius', 'Iamittii', 'Tefft', '81-771-9163', '1972-09-22', 22, 'M', 9, '593 Jackson Parkway', '754-593-3446', 'etefft28@webeden.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Katie', 'Fanti', 'Essex', '78-856-9351', '2007-06-19', 27, 'F', 16, '1214 Elka Trail', '650-323-1876', 'kessex29@prlog.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Evonne', 'Okill', 'Sarjent', '59-279-8291', '1942-09-25', 13, 'F', 8, '75 Dahle Lane', '952-826-9234', 'esarjent2a@altervista.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Roxanne', 'Cornbill', 'Pawlett', '82-834-5461', '1956-09-21', 23, 'F', 16, '9 Ohio Junction', '982-471-4994', 'rpawlett2b@i2i.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Elvera', 'Teodori', null, '67-769-4472', '2006-03-29', 16, 'F', 2, '35175 Eggendart Trail', '602-748-4001', 'egilbanks2c@adobe.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gwendolyn', 'Wessel', 'Dabell', '01-142-8101', '1987-03-05', 18, 'F', 2, '8593 Veith Avenue', '535-269-9662', 'gdabell2d@symantec.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Devina', 'Surmeyer', null, '02-841-6427', '1959-07-30', 7, 'F', 3, '2792 School Place', '900-981-5713', 'dcastelyn2e@globo.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gunilla', 'Brason', null, '54-585-5987', '2008-02-02', 1, 'F', 18, '07661 Di Loreto Street', '266-964-9232', 'gkruse2f@digg.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Thane', 'Larvent', null, '05-028-8374', '1971-02-15', 7, 'M', 28, '70 Oriole Terrace', '274-471-1429', 'tnordass2g@seesaa.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dame', 'Oxteby', 'Pipet', '32-443-8899', '1949-06-29', 2, 'M', 16, '765 Bultman Center', '167-615-9110', 'dpipet2h@webs.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Osmund', 'Wigley', 'Ganiclef', '17-408-8413', '2009-04-03', 5, 'M', 5, '25631 Prairie Rose Center', '469-538-3764', 'oganiclef2i@washington.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Xymenes', 'Elderidge', null, '93-448-0117', '1938-03-13', 25, 'M', 12, '311 Vernon Junction', '413-565-7364', 'xgillett2j@nydailynews.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Timi', 'Clutheram', 'Knok', '57-594-0328', '2000-12-18', 12, 'F', 17, '84974 Lien Alley', '816-739-7279', 'tknok2k@dailymotion.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Merle', 'Colly', 'Botger', '04-293-8753', '1953-03-01', 8, 'F', 20, '274 Helena Plaza', '719-898-5503', 'mbotger2l@ed.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Elenore', 'Tothe', 'Schust', '81-472-5038', '1945-09-02', 13, 'F', 13, '040 Sloan Street', '745-884-4091', 'eschust2m@marriott.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jamie', 'Trippitt', 'Willgoose', '63-855-5894', '2004-11-07', 9, 'M', 6, '81468 Columbus Avenue', '826-946-1484', 'jwillgoose2n@eventbrite.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Otes', 'Pirt', 'Petran', '45-551-9889', '1981-11-22', 18, 'M', 20, '8 Riverside Pass', '741-654-7527', 'opetran2o@parallels.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Federica', 'Messum', 'Josifovitz', '04-116-7174', '1970-06-22', 17, 'F', 14, '9388 Gina Point', '476-287-4459', 'fjosifovitz2p@google.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Clemens', 'Nelsen', 'Timblett', '02-219-5438', '2000-04-13', 15, 'M', 9, '1031 Linden Parkway', '898-973-8952', 'ctimblett2q@kickstarter.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marten', 'Grieveson', 'Handforth', '16-072-0446', '1975-11-30', 6, 'M', 19, '27839 Johnson Way', '622-121-1568', 'mhandforth2r@globo.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Roseanne', 'Cracoe', 'Cray', '09-537-2838', '1960-05-16', 7, 'F', 15, '6 Forest Dale Park', '845-672-5275', 'rcray0@goodreads.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Celinda', 'Colebourne', 'Darington', '84-664-2162', '1969-09-15', 19, 'F', 22, '470 Duke Street', '719-964-2112', 'cdarington1@epa.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Bryn', 'Gainsborough', 'Lukasen', '31-252-7035', '1989-10-15', 11, 'F', 21, '10053 Susan Court', '723-909-8493', 'blukasen2@craigslist.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Nicky', 'Paeckmeyer', null, '96-288-3693', '1981-09-27', 11, 'M', 5, '3 Moland Alley', '711-832-6938', 'nsnaddin3@example.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dorelia', 'Eagleton', 'Meneyer', '46-530-0591', '1936-06-24', 24, 'F', 3, '603 Atwood Junction', '888-645-2640', 'dmeneyer4@yale.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Stanfield', 'Idel', 'Ede', '69-081-1099', '1979-04-16', 7, 'M', 26, '642 Stoughton Hill', '129-717-3306', 'sede5@youtube.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Britta', 'Dible', 'Lautie', '40-908-5895', '2003-07-16', 24, 'F', 21, '51 Kensington Parkway', '156-944-1339', 'blautie6@yellowbook.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Brockie', 'Maydwell', null, '68-104-6662', '1967-04-24', 18, 'M', 18, '18185 Twin Pines Pass', '422-692-7696', 'btregensoe7@businesswire.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Regan', 'Steptow', 'Bourner', '61-779-0587', '2002-05-14', 27, 'M', 5, '5 Gateway Alley', '142-861-1165', 'rbourner8@goo.gl');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Auberta', 'O''Dogherty', 'Grzegorek', '74-991-9016', '1979-02-09', 26, 'F', 4, '4345 Maryland Street', '107-179-4365', 'agrzegorek9@altervista.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Yankee', 'Orpin', 'Glasman', '87-738-7648', '1967-01-01', 23, 'M', 26, '919 Summit Lane', '394-715-3927', 'yglasmana@jiathis.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kelley', 'Akett', null, '80-141-2894', '1944-06-03', 27, 'M', 16, '061 Superior Point', '722-890-9289', 'kfoffanob@simplemachines.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marcile', 'Schoroder', 'McIlwrath', '28-678-5299', '1996-05-06', 22, 'F', 17, '1174 Upham Plaza', '218-725-4392', 'mmcilwrathc@chicagotribune.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Nerte', 'Whettleton', 'Binham', '99-257-8518', '2006-06-30', 7, 'F', 15, '57133 Corscot Circle', '398-435-2890', 'nbinhamd@rediff.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Shem', 'Plenty', null, '20-018-3786', '1944-05-06', 13, 'M', 20, '8736 Old Gate Parkway', '535-611-2442', 'smasdene@cam.ac.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Moises', 'Coole', null, '62-708-8433', '1950-11-18', 27, 'M', 22, '20 Butterfield Hill', '590-154-3142', 'mmacpaikef@seattletimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Suzette', 'Durrington', 'Huot', '65-214-5488', '1945-06-13', 13, 'F', 11, '523 7th Park', '957-960-7982', 'shuotg@stumbleupon.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Maia', 'Hadlee', 'Braiden', '05-056-8372', '1993-11-14', 23, 'F', 23, '1866 Talisman Park', '861-120-6285', 'mbraidenh@oaic.gov.au');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hope', 'Killik', 'Penwell', '01-265-9929', '1948-05-21', 25, 'F', 4, '47 Hanson Way', '729-182-3489', 'hpenwelli@discuz.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Reyna', 'Van der Beek', 'Lincke', '22-949-1074', '1940-06-30', 21, 'F', 26, '10242 Village Green Lane', '524-661-4582', 'rlinckej@sciencedirect.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Giraud', 'Breukelman', 'Bratt', '09-769-0611', '1952-11-03', 26, 'M', 25, '6 Sherman Lane', '799-350-0249', 'gbrattk@discuz.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jocko', 'Leall', null, '09-470-7863', '1998-12-06', 17, 'M', 5, '1 Donald Pass', '975-258-8382', 'jdevinl@unicef.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ab', 'Fley', null, '39-921-9032', '1960-08-09', 12, 'M', 11, '55917 Elgar Drive', '943-449-1611', 'adrysdellm@paginegialle.it');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Cullin', 'Wint', 'Serginson', '17-437-8981', '1947-08-01', 17, 'M', 14, '19 Barby Alley', '869-701-4945', 'cserginsonn@npr.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dena', 'Leates', 'Van der Linde', '71-410-3151', '1979-01-03', 18, 'F', 3, '32 Cottonwood Hill', '443-626-8572', 'dvanderlindeo@over-blog.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Tate', 'Grain', null, '78-036-5581', '1976-03-11', 11, 'F', 26, '70285 Red Cloud Point', '603-480-6984', 'trenachowskip@toplist.cz');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('West', 'Gillbard', 'Everard', '62-806-8438', '1999-05-05', 7, 'M', 19, '96 Elka Park', '594-961-1023', 'weverardq@51.la');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Janek', 'O''Dyvoie', 'Taylder', '07-983-2945', '1999-12-31', 15, 'M', 12, '97 Hermina Place', '598-513-8788', 'jtaylderr@addthis.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Harv', 'Ballintime', 'Matiewe', '22-143-5424', '2000-09-26', 2, 'M', 13, '99962 Mifflin Lane', '616-675-6245', 'hmatiewes@behance.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Swen', 'Morphet', 'Balden', '57-708-3584', '1960-01-30', 15, 'M', 13, '48 Becker Trail', '347-869-0753', 'sbaldent@friendfeed.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lester', 'Ruggieri', 'Degg', '48-263-1738', '1990-08-18', 22, 'M', 24, '6188 Brown Alley', '455-586-9328', 'ldeggu@businessweek.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Felecia', 'Sabathier', 'Craxford', '21-068-2188', '1965-07-26', 10, 'F', 8, '47 Farwell Trail', '877-753-3791', 'fcraxfordv@list-manage.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Geri', 'Gleave', 'Gallaher', '83-438-8587', '1959-03-21', 25, 'M', 17, '2 Lotheville Junction', '924-833-5685', 'ggallaherw@fotki.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Belva', 'McConachie', 'Loreit', '56-523-1355', '2004-03-15', 28, 'F', 13, '6 Forest Parkway', '506-397-1122', 'bloreitx@alexa.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Mycah', 'Howsden', 'Sully', '22-616-6027', '1962-10-28', 27, 'M', 22, '0439 Green Ridge Drive', '436-409-9875', 'msullyy@europa.eu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Agnola', 'Seiler', 'Hamon', '79-158-5449', '1986-04-27', 8, 'F', 26, '57258 Prairie Rose Avenue', '104-599-6763', 'ahamonz@de.vu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Neil', 'Toth', 'Deetlof', '02-697-5505', '1995-06-07', 10, 'M', 28, '343 Towne Crossing', '794-479-3100', 'ndeetlof10@nyu.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Yard', 'Crips', 'Giacopelo', '93-589-1997', '1991-02-23', 18, 'M', 1, '65949 Lakewood Gardens Parkway', '282-758-3399', 'ygiacopelo11@godaddy.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Josi', 'Rojel', 'Bartelot', '97-778-1816', '1999-10-20', 22, 'F', 24, '12 Valley Edge Junction', '140-349-8732', 'jbartelot12@youku.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Rollie', 'Wharin', 'Dower', '27-687-9425', '1994-05-11', 9, 'M', 13, '1429 Upham Parkway', '855-921-4481', 'rdower13@census.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Catriona', 'Lawlan', null, '42-323-3719', '1975-08-16', 1, 'F', 17, '1 Fallview Avenue', '299-442-7977', 'cstudders14@blog.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Andy', 'Bambra', 'Blankhorn', '79-672-6600', '1995-10-21', 10, 'M', 9, '75842 Pepper Wood Circle', '494-893-4543', 'ablankhorn15@t-online.de');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Letty', 'Duplock', 'Maty', '51-448-3598', '1993-06-17', 20, 'F', 14, '76505 5th Road', '460-444-4816', 'lmaty16@nature.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Magdalen', 'Olland', null, '62-369-0119', '1938-11-27', 5, 'F', 28, '5549 Dakota Crossing', '916-871-5012', 'mtivnan17@google.fr');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Rudiger', 'Rickardsson', 'Dalziel', '69-899-3967', '1971-12-15', 1, 'M', 20, '68 Hoard Street', '553-335-3224', 'rdalziel18@weather.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Meggie', 'Anthoin', 'Lodovichi', '04-889-1316', '1936-08-24', 19, 'F', 11, '419 Novick Court', '985-420-7694', 'mlodovichi19@nytimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Franklyn', 'Kay', 'Ponder', '88-509-0508', '1950-08-05', 1, 'M', 17, '367 Porter Crossing', '266-404-2767', 'fponder1a@goodreads.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Job', 'Dimitrov', 'Marcinkus', '22-992-8987', '2009-06-06', 26, 'M', 11, '3 Northwestern Lane', '692-901-8931', 'jmarcinkus1b@pcworld.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Alano', 'Lias', 'Newdick', '19-133-5685', '2005-04-11', 26, 'M', 7, '040 Mesta Crossing', '568-110-2599', 'anewdick1c@weebly.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Isidoro', 'Mattes', 'Lukasik', '32-549-7489', '1998-10-26', 11, 'M', 21, '904 Barnett Street', '321-398-2242', 'ilukasik1d@dailymotion.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Pier', 'Enderle', 'Santostefano.', '63-403-5553', '1958-11-10', 15, 'F', 24, '3883 Hauk Place', '748-324-1548', 'psantostefano1e@wikipedia.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gradey', 'Merryweather', 'Bladon', '72-967-4973', '1971-06-13', 24, 'M', 24, '2123 Orin Court', '301-725-6903', 'gbladon1f@imageshack.us');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Natka', 'Ponten', 'Glashby', '76-872-3350', '1945-10-28', 25, 'F', 3, '6 Milwaukee Court', '886-705-6334', 'nglashby1g@cmu.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Teddy', 'Sickert', null, '24-879-0935', '1947-10-03', 18, 'F', 1, '84250 Ridge Oak Road', '772-259-3689', 'tstalman1h@sohu.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Yorgos', 'Ephson', 'Assinder', '31-337-3886', '1960-12-11', 3, 'M', 16, '5 Moose Park', '941-799-9565', 'yassinder1i@epa.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Karil', 'Lasty', 'Tudball', '31-174-4127', '1955-07-25', 28, 'F', 28, '06 Kedzie Pass', '801-576-6882', 'ktudball1j@de.vu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Brooks', 'Tatterton', 'Borgars', '94-357-3670', '1995-11-26', 22, 'M', 6, '0 Golf View Junction', '442-357-6749', 'bborgars1k@accuweather.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Goober', 'Gammel', 'St. Quentin', '13-394-8708', '1974-12-11', 1, 'M', 11, '33 Huxley Way', '810-477-1595', 'gstquentin1l@google.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Smitty', 'Clohessy', 'McGhee', '16-519-6451', '1975-08-19', 24, 'M', 3, '44 Dawn Hill', '926-115-2634', 'smcghee1m@4shared.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Andrus', 'Atterley', null, '77-059-4252', '1963-12-15', 16, 'M', 7, '28097 Mayer Center', '426-597-9148', 'amougeot1n@nationalgeographic.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hirsch', 'Arsmith', 'Christopherson', '37-595-2805', '2008-07-20', 27, 'M', 5, '2068 Lillian Lane', '942-709-6646', 'hchristopherson1o@auda.org.au');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Royal', 'Blomefield', 'Mannock', '40-372-6053', '1958-01-06', 4, 'M', 27, '93 Schmedeman Center', '553-813-7228', 'rmannock1p@wikispaces.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Al', 'Boat', null, '82-303-4470', '2001-05-05', 13, 'M', 25, '133 Petterle Lane', '896-200-1115', 'afonquernie1q@livejournal.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Twyla', 'Southey', 'Laimable', '07-560-6229', '1948-08-20', 18, 'F', 23, '318 Johnson Hill', '870-835-2938', 'tlaimable1r@tinypic.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Reinhold', 'Pawelski', 'McInnery', '48-820-6554', '2010-05-20', 27, 'M', 22, '83 Calypso Trail', '826-701-3435', 'rmcinnery1s@pinterest.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Keith', 'Meneur', 'Tanby', '22-608-7054', '2008-06-04', 28, 'M', 12, '8718 Spenser Court', '106-406-4884', 'ktanby1t@miitbeian.gov.cn');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Cally', 'Swin', 'Ollier', '06-955-2547', '1939-12-24', 21, 'F', 12, '50 6th Center', '468-646-5607', 'collier1u@domainmarket.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Beauregard', 'Joppich', 'Mawdsley', '83-367-8184', '1949-10-15', 4, 'M', 28, '466 Oak Valley Court', '768-585-6808', 'bmawdsley1v@skyrock.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Curran', 'Parbrook', 'Rudram', '49-785-3796', '1959-04-12', 21, 'M', 22, '560 Bartillon Parkway', '303-524-9476', 'crudram1w@sun.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Alexa', 'Dinan', 'Olpin', '14-872-3422', '1998-03-14', 26, 'F', 10, '8057 Daystar Trail', '314-141-2619', 'aolpin1x@sourceforge.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Al', 'Preist', 'Gaiford', '38-804-9646', '1939-10-08', 23, 'M', 5, '5980 Browning Parkway', '452-441-7319', 'agaiford1y@scientificamerican.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lucio', 'Dettmar', 'Apfel', '85-287-4646', '1974-09-26', 22, 'M', 25, '62606 Old Shore Drive', '826-211-0049', 'lapfel1z@go.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Fay', 'Berntssen', 'Dearnaly', '62-245-9476', '1967-08-17', 24, 'F', 8, '435 Warner Drive', '578-673-9475', 'fdearnaly20@hubpages.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kala', 'Southby', null, '84-241-8835', '2009-02-01', 10, 'F', 18, '45 Grayhawk Pass', '716-317-8096', 'klavallin21@google.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Iosep', 'Shilburne', 'Tindley', '41-522-1411', '1994-12-28', 21, 'M', 28, '91 Red Cloud Park', '775-429-9004', 'itindley22@google.com.br');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ronni', 'Feldhammer', 'O''Bradden', '84-669-2270', '1942-07-08', 13, 'F', 19, '6397 Service Junction', '507-570-0465', 'robradden23@chron.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Heall', 'Hounsom', 'Mathey', '61-022-9124', '1949-01-12', 7, 'M', 6, '8 Debs Park', '450-158-3703', 'hmathey24@stumbleupon.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Monika', 'Jemison', 'Storrar', '52-550-0133', '1945-02-10', 23, 'F', 28, '57 Melody Park', '327-294-6404', 'mstorrar25@samsung.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Claire', 'Lamden', 'Dawtrey', '13-185-8493', '1956-01-04', 22, 'M', 18, '4613 Starling Court', '573-385-1423', 'cdawtrey26@instagram.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Fanya', 'Hukins', 'Oxby', '53-107-2895', '1938-04-22', 21, 'F', 27, '074 Dennis Hill', '981-819-0711', 'foxby27@businesswire.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Adrianne', 'Graser', 'Schreiner', '21-411-7860', '2000-05-12', 19, 'F', 7, '7 New Castle Road', '656-294-2007', 'aschreiner28@dyndns.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ora', 'Scartifield', null, '61-965-3359', '1968-03-14', 9, 'F', 16, '20 Express Place', '934-814-4358', 'ooates29@ted.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ammamaria', 'Veillard', 'Angric', '13-200-0804', '1958-07-09', 4, 'F', 25, '74 Claremont Point', '867-214-7987', 'aangric2a@economist.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ediva', 'Kliment', 'Choupin', '35-705-1509', '1941-07-23', 23, 'F', 28, '656 Bunker Hill Road', '713-829-7143', 'echoupin2b@twitter.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marylinda', 'Mordan', null, '32-679-9793', '1943-12-30', 5, 'F', 15, '4 Commercial Alley', '256-780-4233', 'mganniclifft2c@europa.eu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Patrizius', 'Cessford', null, '92-898-9303', '1946-07-24', 6, 'M', 19, '861 Johnson Court', '511-852-5990', 'pdoole2d@imgur.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Loleta', 'Czaja', 'Cabotto', '49-179-6509', '1966-11-05', 13, 'F', 13, '278 Armistice Road', '641-281-9571', 'lcabotto2e@google.com.br');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Linea', 'Hindrich', 'Fossick', '59-178-0247', '1975-12-29', 12, 'F', 22, '05 Hauk Street', '522-182-8999', 'lfossick2f@foxnews.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Riane', 'Jillis', 'Labbez', '75-908-1540', '1969-06-24', 16, 'F', 12, '14660 Vidon Court', '147-611-8332', 'rlabbez2g@hud.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Virginia', 'Coldrick', 'Lindblom', '22-972-2462', '1977-12-22', 5, 'F', 9, '32562 Hovde Hill', '505-282-6946', 'vlindblom2h@techcrunch.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Uri', 'Slad', 'Sillis', '17-865-1906', '1972-07-09', 6, 'M', 14, '8 Delaware Crossing', '113-871-7390', 'usillis2i@state.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Nehemiah', 'Leroy', 'Pettecrew', '12-193-7874', '1970-06-03', 15, 'M', 3, '4 Sutherland Trail', '483-709-1322', 'npettecrew2j@forbes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ediva', 'Petri', 'Beany', '22-138-8122', '1987-04-29', 4, 'F', 25, '57812 Riverside Hill', '697-110-8195', 'ebeany2k@virginia.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lotti', 'Peele', 'Fenemore', '21-301-3710', '1944-01-13', 25, 'F', 12, '70 Westerfield Pass', '387-925-9836', 'lfenemore2l@marriott.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Emily', 'Parnall', 'Mingard', '31-168-6733', '1996-11-16', 23, 'F', 2, '70 Boyd Junction', '883-917-0987', 'emingard2m@weibo.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Benjy', 'Knyvett', null, '35-114-3825', '1982-08-07', 6, 'M', 9, '8506 Garrison Court', '768-762-8974', 'bvaneev2n@ca.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Grady', 'Colaco', 'Huggons', '21-180-4340', '1940-02-10', 13, 'M', 21, '4051 Loomis Terrace', '935-727-2531', 'ghuggons2o@europa.eu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Milena', 'Marler', 'Nelles', '56-664-4811', '1965-05-13', 4, 'F', 5, '6 Goodland Drive', '521-262-6060', 'mnelles2p@yolasite.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Aveline', 'Polfer', 'Cabotto', '06-562-7730', '1949-09-14', 13, 'F', 22, '32525 Evergreen Place', '588-293-7430', 'acabotto2q@123-reg.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Rourke', 'Dudek', 'Hammerberger', '20-549-4392', '1983-12-27', 10, 'M', 6, '0298 Morrow Circle', '498-366-8701', 'rhammerberger2r@themeforest.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Cy', 'Saenz', null, '56-266-1462', '1956-05-17', 18, 'M', 2, '952 American Court', '620-890-0685', 'cculleford0@mediafire.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Karel', 'Haddrill', 'Queyos', '37-544-6579', '1969-03-03', 16, 'F', 9, '4377 Little Fleur Drive', '286-135-8594', 'kqueyos1@usgs.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Vick', 'Dessant', 'Ioan', '56-130-3079', '1962-05-26', 1, 'M', 9, '7540 6th Drive', '682-103-0726', 'vioan2@blogtalkradio.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Walker', 'Russel', null, '88-166-9956', '1999-04-23', 6, 'M', 19, '1 Schiller Plaza', '331-453-4802', 'wratazzi3@indiatimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lorry', 'Elesander', null, '63-052-4851', '1969-08-13', 14, 'F', 14, '3 Marcy Center', '922-389-5617', 'lconlon4@sogou.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Isabeau', 'Hargitt', 'Sybe', '62-690-9767', '1944-07-13', 3, 'F', 20, '74 Blue Bill Park Parkway', '581-368-3889', 'isybe5@google.com.au');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Conroy', 'Bryce', 'Ilchuk', '64-047-3530', '1939-02-18', 4, 'M', 18, '0244 Kipling Park', '451-490-5874', 'cilchuk6@360.cn');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dore', 'Checchi', 'Mozzetti', '40-087-2137', '2002-06-22', 8, 'F', 28, '64 Bartelt Lane', '601-784-7467', 'dmozzetti7@webs.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Flynn', 'Kinner', 'Wixon', '60-693-8317', '1987-03-25', 15, 'M', 7, '7 Sage Pass', '149-529-8963', 'fwixon8@amazon.de');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Leonard', 'Othen', 'Romand', '25-282-7340', '1942-02-26', 22, 'M', 3, '2978 Troy Lane', '438-167-8574', 'lromand9@amazon.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Bevan', 'Blazewicz', null, '10-105-8105', '1951-06-09', 19, 'M', 7, '8544 High Crossing Court', '833-424-5187', 'bpappina@epa.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Amalie', 'Tchaikovsky', 'Willwood', '95-187-4755', '1936-08-15', 5, 'F', 20, '2970 Pond Point', '385-518-8604', 'awillwoodb@ed.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Allyce', 'Morsom', null, '20-801-5426', '1973-01-15', 27, 'F', 15, '19 Homewood Point', '563-880-5440', 'apoffc@nbcnews.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Faydra', 'Dyneley', 'Steinor', '24-882-2716', '1980-05-19', 11, 'F', 3, '762 Summit Crossing', '342-297-5116', 'fsteinord@hexun.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ossie', 'Kitteridge', 'Cornish', '52-201-6558', '2009-03-05', 23, 'M', 25, '02 Farmco Park', '197-311-2844', 'ocornishe@yelp.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Tudor', 'Le Pine', 'Nemchinov', '38-654-5937', '1948-04-12', 15, 'M', 21, '27 Ramsey Plaza', '317-950-1272', 'tnemchinovf@php.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Janka', 'Speeks', 'Phoebe', '69-458-8527', '1990-11-02', 12, 'F', 24, '001 Mariners Cove Junction', '505-271-5219', 'jphoebeg@php.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Etti', 'Lodwick', 'Detheridge', '06-686-0616', '1939-06-01', 4, 'F', 25, '8742 Ilene Drive', '892-599-7160', 'edetheridgeh@com.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Peri', 'Rubinfajn', 'Dorset', '96-201-3121', '1936-01-26', 24, 'F', 4, '72 Prairieview Lane', '849-998-3688', 'pdorseti@bizjournals.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Tabbie', 'Maloney', null, '23-524-9781', '1965-10-23', 5, 'F', 24, '60 Green Court', '100-172-8181', 'tgolsonj@businessinsider.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gualterio', 'Liger', 'Reynish', '55-890-8318', '1971-04-18', 18, 'M', 26, '0510 Utah Place', '655-426-0730', 'greynishk@businessweek.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Cal', 'Elgey', 'Pain', '00-322-4307', '1972-10-04', 20, 'F', 7, '62 Swallow Court', '753-874-6922', 'cpainl@pbs.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Cati', 'Baton', 'Giorgiutti', '28-079-9298', '1950-05-27', 23, 'F', 12, '7934 Waxwing Parkway', '949-651-7018', 'cgiorgiuttim@imageshack.us');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Astra', 'Rankling', null, '59-816-0391', '1972-12-16', 2, 'F', 17, '6850 Wayridge Avenue', '606-500-2755', 'ademeltn@ask.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ginger', 'Ife', 'Dunklee', '86-409-4261', '1942-09-28', 19, 'M', 8, '32876 Birchwood Plaza', '363-301-2265', 'gdunkleeo@seesaa.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dionisio', 'Brame', 'Iskower', '10-835-7014', '2005-09-11', 16, 'M', 20, '749 Kingsford Lane', '772-703-7320', 'diskowerp@upenn.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Abigale', 'Snelgrove', 'Parlet', '70-908-0672', '2008-07-22', 5, 'F', 23, '4 Dapin Junction', '592-913-6581', 'aparletq@wix.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hedda', 'Pallatina', 'Alldridge', '81-264-2297', '1980-08-15', 27, 'F', 22, '268 Larry Way', '712-862-1483', 'halldridger@webnode.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Allx', 'Steffan', 'Jamblin', '96-006-7475', '1954-08-04', 14, 'F', 9, '739 4th Junction', '136-894-8859', 'ajamblins@redcross.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Merle', 'Divall', 'Callender', '14-697-8018', '1965-12-16', 28, 'M', 14, '117 Scoville Junction', '250-683-9146', 'mcallendert@wiley.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jannelle', 'Redsall', 'Ebi', '63-802-9590', '2002-10-14', 13, 'F', 3, '213 North Drive', '916-478-1630', 'jebiu@ft.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gill', 'Jent', 'Kluss', '95-783-0372', '1996-02-28', 3, 'M', 23, '8205 Tony Point', '624-886-3351', 'gklussv@cbslocal.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Pate', 'Faussett', 'Winkell', '87-835-0848', '1941-09-05', 10, 'M', 11, '5 Kipling Plaza', '959-617-1363', 'pwinkellw@addtoany.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kellyann', 'Channon', null, '83-883-4944', '1961-06-09', 4, 'F', 18, '67956 Gulseth Street', '516-521-4761', 'kbricknellx@hud.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Valida', 'Nutter', 'Dreng', '66-050-1079', '1975-04-24', 12, 'F', 19, '4753 Farragut Circle', '211-285-6023', 'vdrengy@earthlink.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Morey', 'Humberstone', 'Mathison', '35-429-0403', '1964-06-08', 28, 'M', 17, '9 Nova Hill', '852-553-1172', 'mmathisonz@umn.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Willdon', 'Ley', 'Dinning', '36-171-0156', '1989-05-26', 14, 'M', 1, '246 Village Green Park', '208-759-2314', 'wdinning10@prlog.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Montague', 'Matveichev', 'Rosthorn', '54-566-6715', '1951-09-12', 18, 'M', 28, '9179 Eliot Circle', '205-305-3243', 'mrosthorn11@washingtonpost.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jerrilee', 'Turban', 'Anderton', '66-286-6720', '1987-09-27', 10, 'F', 12, '64706 Harper Terrace', '181-640-3464', 'janderton12@yandex.ru');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dion', 'Cornelleau', null, '51-186-9461', '2000-07-17', 26, 'F', 25, '56 Carey Drive', '359-884-0450', 'dmulvihill13@typepad.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Neile', 'Gillatt', 'Vanne', '90-230-0990', '1994-09-13', 13, 'F', 12, '80969 Burrows Circle', '767-398-2758', 'nvanne14@hao123.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kenneth', 'Jenk', 'Tillot', '52-701-0656', '1936-04-15', 4, 'M', 6, '73970 Memorial Court', '217-998-8942', 'ktillot15@live.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Thia', 'Spinige', 'Groomebridge', '45-455-9691', '2009-02-05', 12, 'F', 15, '53488 Lakeland Court', '399-309-7404', 'tgroomebridge16@weebly.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Samuel', 'Jacmard', null, '79-427-5536', '1950-02-25', 19, 'M', 11, '101 Acker Terrace', '615-574-2569', 'sshepheard17@cyberchimps.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gayla', 'Shorrock', 'Scamaden', '73-410-6543', '1954-01-16', 22, 'F', 17, '158 Waxwing Pass', '715-615-2036', 'gscamaden18@csmonitor.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Tobin', 'Royall', 'Linner', '06-239-9638', '2006-11-13', 14, 'M', 20, '4715 Oak Valley Center', '488-854-1433', 'tlinner19@bizjournals.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Annabel', 'Thewless', null, '47-630-4803', '1968-10-17', 23, 'F', 1, '2 Summit Place', '129-601-5203', 'arudwell1a@hibu.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lydia', 'Buret', 'Georgot', '96-018-7822', '1980-02-01', 11, 'F', 8, '3 Anzinger Center', '866-302-0828', 'lgeorgot1b@seattletimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hestia', 'Denniss', 'Bottrell', '72-308-8019', '1949-06-09', 7, 'F', 13, '50402 Goodland Junction', '733-709-6667', 'hbottrell1c@businesswire.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Maryrose', 'Dimic', 'Danniell', '13-960-2389', '1994-12-05', 5, 'F', 25, '7 Kensington Pass', '424-187-6803', 'mdanniell1d@xinhuanet.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Vassily', 'Harvie', 'Sigars', '26-528-9707', '1989-06-20', 1, 'M', 19, '51 Jay Junction', '918-623-0362', 'vsigars1e@blogger.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Riobard', 'Bouskill', null, '52-151-3145', '1995-01-21', 22, 'M', 10, '87 Donald Court', '975-525-9218', 'rgreenhowe1f@joomla.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Nickolaus', 'McGunley', 'Galpin', '64-480-3688', '1997-01-02', 13, 'M', 7, '1 Haas Trail', '445-149-8741', 'ngalpin1g@discovery.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Thibaud', 'Strass', 'Simoens', '35-341-2280', '2007-10-11', 8, 'M', 5, '9 Chinook Parkway', '193-802-1337', 'tsimoens1h@jigsy.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Berty', 'Jendrys', 'Banghe', '39-801-4471', '1944-01-22', 3, 'F', 19, '79151 Pankratz Park', '775-923-0796', 'bbanghe1i@answers.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Costanza', 'Downer', null, '62-071-5941', '1959-03-28', 19, 'F', 16, '47 Mccormick Parkway', '949-128-7771', 'ckermott1j@yandex.ru');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Xena', 'Laidlow', null, '23-249-0302', '1962-07-09', 1, 'F', 19, '3893 Anthes Pass', '974-515-7815', 'xmatiewe1k@accuweather.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Vail', 'Gelder', null, '11-613-7073', '1962-03-05', 12, 'M', 6, '240 Kipling Hill', '360-355-5391', 'vcrippin1l@ustream.tv');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Herve', 'Morrissey', 'Pennazzi', '08-849-6382', '2008-01-07', 1, 'M', 21, '05 Linden Drive', '513-699-7322', 'hpennazzi1m@lycos.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Maxie', 'Ducarel', null, '71-439-9619', '1951-05-25', 14, 'M', 22, '6656 Maple Wood Center', '348-473-0878', 'mwennam1n@about.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Yard', 'Sallery', 'Tremeer', '07-204-4439', '1954-04-17', 18, 'M', 10, '9 Sherman Pass', '536-870-2949', 'ytremeer1o@taobao.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jelene', 'Wolpert', 'Garaghan', '96-466-8230', '1997-12-31', 20, 'F', 14, '18111 Golden Leaf Lane', '312-560-7307', 'jgaraghan1p@google.com.au');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Susette', 'Nuton', 'Flippini', '25-556-9766', '1968-08-02', 12, 'F', 28, '28 Southridge Court', '498-469-1386', 'sflippini1q@artisteer.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ravi', 'Farherty', null, '87-602-6523', '1949-02-21', 12, 'M', 22, '13 Fieldstone Place', '176-620-5690', 'rbonsale1r@adobe.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('De witt', 'Djekic', 'Meus', '03-091-4841', '1965-12-18', 6, 'M', 19, '750 Delaware Avenue', '913-220-2365', 'dmeus1s@globo.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Winifield', 'Bardnam', 'Rustidge', '40-637-4974', '1991-07-24', 14, 'M', 14, '0 Onsgard Junction', '579-512-1583', 'wrustidge1t@loc.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Pandora', 'Aysh', 'Kuhnert', '22-935-2630', '1947-08-03', 27, 'F', 10, '005 Golf View Alley', '209-760-6219', 'pkuhnert1u@homestead.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Garrott', 'Vales', 'Osman', '05-488-8683', '2004-03-08', 22, 'M', 7, '8 Cody Plaza', '368-552-5575', 'gosman1v@t.co');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Heindrick', 'Hatchett', null, '73-231-6485', '2004-01-19', 20, 'M', 1, '39121 Old Shore Circle', '510-515-0727', 'hpowderham1w@jimdo.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Obadias', 'Spaducci', 'Benfell', '75-735-2091', '1953-10-04', 20, 'M', 2, '1658 Debs Road', '539-889-2344', 'obenfell1x@csmonitor.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Wald', 'Gouley', 'Plaschke', '06-053-7775', '1984-11-11', 26, 'M', 7, '76886 Lyons Point', '809-739-8256', 'wplaschke1y@typepad.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ali', 'Ert', 'Stearn', '92-432-7050', '1946-05-08', 8, 'M', 26, '7706 Coleman Point', '454-934-3891', 'astearn1z@indiatimes.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Mark', 'Carwardine', 'Tregale', '49-378-6941', '1944-02-23', 21, 'M', 17, '0906 Trailsway Drive', '174-788-7325', 'mtregale20@gmpg.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Jose', 'Hysom', 'Sjollema', '48-222-5866', '1952-09-20', 2, 'M', 13, '8 Bluejay Alley', '118-794-4709', 'jsjollema21@ameblo.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Damien', 'Braim', 'Hurlston', '66-685-4475', '1952-11-14', 21, 'M', 12, '0 Mosinee Street', '333-982-3257', 'dhurlston22@examiner.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Michael', 'Madsen', null, '11-737-2079', '1949-07-14', 8, 'M', 5, '7882 Esch Avenue', '401-611-2790', 'morafferty23@globo.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Elbertina', 'Reiling', null, '69-259-2583', '1975-04-12', 2, 'F', 5, '82 Jana Court', '760-959-3544', 'ecuddehay24@ed.gov');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Debera', 'Kelk', 'Ianiello', '85-107-2646', '2009-03-03', 16, 'F', 20, '10 Everett Drive', '384-129-9478', 'dianiello25@wikispaces.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Micky', 'Hammonds', 'Casin', '02-864-6975', '1974-08-21', 6, 'M', 7, '3109 Packers Center', '773-911-8538', 'mcasin26@yahoo.co.jp');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kenon', 'Crammy', 'Shoesmith', '91-135-4613', '1987-05-15', 19, 'M', 24, '964 Hollow Ridge Park', '633-723-3125', 'kshoesmith27@cisco.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Marjie', 'Pegg', null, '28-191-9930', '1943-02-13', 6, 'F', 28, '3127 Hermina Place', '979-824-0693', 'mbaish28@dropbox.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Sileas', 'Coulman', 'Braidon', '70-269-0400', '2002-06-01', 26, 'F', 7, '0 Grasskamp Avenue', '210-921-7302', 'sbraidon29@seesaa.net');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Gianna', 'Stidson', 'Gasperi', '11-510-7878', '1969-01-18', 25, 'F', 16, '75142 Longview Avenue', '866-766-5555', 'ggasperi2a@unc.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Norby', 'Nano', 'Berns', '22-266-2340', '1996-07-02', 27, 'M', 5, '55 Jana Plaza', '900-402-7780', 'nberns2b@google.com.br');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Stormie', 'Coenraets', 'Blackadder', '26-071-0844', '1996-10-25', 25, 'F', 14, '4258 Clemons Avenue', '931-980-8700', 'sblackadder2c@google.fr');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Lorene', 'Zimmer', 'Schlagtmans', '53-880-4438', '1948-07-10', 9, 'F', 13, '504 Fallview Alley', '552-670-2719', 'lschlagtmans2d@unblog.fr');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Ulberto', 'Tran', null, '77-416-9599', '1967-06-14', 6, 'M', 26, '2839 Springs Point', '290-569-2690', 'upohling2e@oakley.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Vallie', 'Haversham', null, '99-155-2959', '1956-01-08', 21, 'F', 14, '67724 Mesta Lane', '176-373-2704', 'vhebner2f@scientificamerican.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kandace', 'Leech', 'Collie', '59-489-8301', '1962-07-04', 21, 'F', 3, '716 Esker Alley', '140-361-0644', 'kcollie2g@pbs.org');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Stoddard', 'Orman', 'Shafto', '04-856-2482', '2007-10-12', 14, 'F', 7, '12126 Petterle Park', '449-902-0287', 'sshafto2h@cdbaby.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Valentine', 'Dionisi', 'Ainslee', '01-059-1341', '1942-01-30', 2, 'F', 10, '8 Pawling Alley', '674-723-7900', 'vainslee2i@vk.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Kathye', 'Tilne', null, '83-581-4651', '1943-02-26', 25, 'F', 3, '05577 Monterey Circle', '417-462-6177', 'kbohlje2j@psu.edu');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Erma', 'Robb', 'Stinchcombe', '85-639-3369', '1995-04-23', 15, 'F', 5, '5 Spenser Terrace', '559-100-3228', 'estinchcombe2k@miibeian.gov.cn');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Toddy', 'Currey', 'Hazeltine', '75-658-4016', '1989-01-25', 20, 'M', 13, '1577 Stone Corner Trail', '373-380-9604', 'thazeltine2l@slate.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Elise', 'Worsnap', 'Dunlap', '71-677-0079', '1994-06-11', 2, 'F', 26, '05 Anderson Lane', '122-256-2965', 'edunlap2m@mediafire.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Elizabeth', 'Hubble', 'Brimilcome', '45-406-9507', '1972-04-02', 19, 'F', 10, '885 Russell Way', '533-627-2540', 'ebrimilcome2n@timesonline.co.uk');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Hugo', 'Cotterel', null, '16-493-7411', '2002-02-19', 24, 'M', 25, '42447 American Ash Way', '465-300-0719', 'htandy2o@mayoclinic.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Dom', 'Jerdon', null, '82-577-1986', '2009-02-14', 21, 'M', 5, '5438 Prairie Rose Center', '117-564-8786', 'dkeenan2p@chron.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Trista', 'Claworth', 'Dockreay', '87-264-7140', '1994-10-05', 9, 'F', 28, '4436 North Trail', '423-761-7055', 'tdockreay2q@topsy.com');
+insert into persons (first_name, last_name, middle_name, passport_number, date_of_birth, place_of_birth, gender, region_id, address, phone, email) values ('Stacee', 'Blockey', 'Halifax', '64-729-0672', '1973-02-23', 25, 'F', 27, '0 Arapahoe Parkway', '843-478-6254', 'shalifax2r@tinyurl.com');
+
+-- --------------------------------------------------------------------------------------------------
+-- BLOOD GROUPS
+-- --------------------------------------------------------------------------------------------------
+insert into blood_groups (name) values ('O-');
+insert into blood_groups (name) values ('O+');
+insert into blood_groups (name) values ('A-');
+insert into blood_groups (name) values ('A+');
+insert into blood_groups (name) values ('B-');
+insert into blood_groups (name) values ('B+');
+insert into blood_groups (name) values ('AB-');
+insert into blood_groups (name) values ('AB+');
+
+-- --------------------------------------------------------------------------------------------------
+-- HOSPITALS
+-- --------------------------------------------------------------------------------------------------
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Christiansen Inc', 2, '00059 Moland Street', '423-305-7275', '468-782-7403', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Grady LLC', 23, '58 Randy Circle', '237-429-2642', '370-910-4601', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Abshire-Nikolaus', 5, '602 Dorton Trail', '519-863-9983', '789-933-1000', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Fritsch, Mills and Bode', 13, '0 Bartelt Circle', '969-641-9967', '886-621-0536', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Kautzer, Upton and Dickens', 7, '46944 Rockefeller Way', '191-954-3985', '213-487-7074', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Wuckert-Romaguera', 5, '87 Del Mar Pass', '401-683-7145', '231-309-3031', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Nolan, Cronin and Windler', 4, '36845 Ridgeview Plaza', '828-196-0316', '946-312-3386', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Schaden LLC', 22, '2573 Sloan Court', '750-157-7326', '240-585-0112', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Beahan-Treutel', 13, '51 Mcguire Circle', '118-757-1190', '619-801-0547', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Lynch, Boyer and Cronin', 19, '601 Cardinal Crossing', '844-179-1448', '904-590-8506', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Stoltenberg, Kub and Casper', 26, '5155 Fisk Plaza', '946-276-2326', '507-535-0149', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Reinger-Spinka', 18, '8 Algoma Plaza', '899-284-6769', '447-385-2445', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Kautzer and Sons', 8, '95383 Johnson Alley', '891-318-7406', '874-888-4833', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Feest and Sons', 16, '974 Old Shore Circle', '837-773-7985', '623-890-7132', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Rempel Group', 19, '55 Sullivan Alley', '665-962-1117', '141-437-8722', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Thiel-Zulauf', 23, '29 Dakota Junction', '178-876-4198', '114-604-7773', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Yundt-O''Hara', 22, '9852 Transport Hill', '827-803-3656', '557-845-1350', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Batz Group', 5, '923 Browning Alley', '769-949-5743', '738-152-1178', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Fadel, Kessler and Adams', 4, '1198 Bultman Street', '508-215-8724', '949-321-0897', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Kling-Dickinson', 1, '50 Jay Plaza', '700-948-1483', '388-648-5314', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Lowe, Mohr and Mosciski', 7, '11667 Reindahl Avenue', '407-616-0215', '542-474-9638', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Hills Group', 22, '623 Fallview Terrace', '494-771-6771', '304-924-8342', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Wolf-Hyatt', 14, '7246 Anzinger Alley', '773-564-4606', '273-981-4859', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Monahan and Sons', 2, '27631 Washington Junction', '477-674-8312', '432-139-5979', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Kessler Group', 13, '29586 Corben Point', '688-141-2021', '763-566-3174', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Herman Inc', 18, '11 Gateway Circle', '447-306-7280', '291-394-8576', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Stark LLC', 25, '79100 Mockingbird Point', '793-923-8123', '865-576-4114', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Lehner-Glover', 15, '88 Manitowish Street', '985-832-7258', '429-591-2777', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Bernhard-Leannon', 6, '21 Mosinee Circle', '834-203-0236', '548-168-4488', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Bruen-Haag', 12, '7211 Toban Point', '619-176-6647', '762-781-0597', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Bauch LLC', 21, '38668 Mallory Circle', '555-585-6948', '895-969-5052', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Green, Lemke and Dietrich', 26, '2 Eastlawn Street', '411-989-7882', '128-867-3887', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Mitchell, Collier and McDermott', 11, '879 Ridge Oak Street', '716-397-4260', '878-947-2417', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Kuhic and Sons', 16, '3 Straubel Junction', '218-411-8959', '922-284-1345', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Doyle-Crona', 6, '102 Mariners Cove Alley', '407-472-4679', '104-131-9666', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Stracke Group', 25, '159 East Drive', '633-477-3673', '220-745-9346', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Hahn, Hoeger and Hickle', 27, '27041 Elmside Park', '115-380-5946', '467-710-2426', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Conn Group', 15, '467 Shopko Parkway', '354-160-9901', '768-243-9361', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Rohan-Torp', 26, '9 Parkside Park', '338-691-4550', '343-550-9467', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Lang-Deckow', 24, '54550 Delladonna Center', '148-695-2946', '175-195-1848', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Sawayn-Connelly', 9, '99 Jay Parkway', '321-828-0911', '351-698-6080', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Abshire-Goodwin', 25, '6159 Melrose Alley', '792-135-2509', '427-988-5821', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Powlowski-Rippin', 5, '54 Hansons Road', '665-882-3113', '335-283-3774', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Satterfield-Lang', 13, '46232 Ilene Lane', '597-583-7972', '746-889-1031', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Friesen-Williamson', 28, '012 Aberg Place', '717-392-5489', '688-502-1710', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Pouros-Batz', 18, '039 Clyde Gallagher Center', '849-328-0168', '168-519-2334', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Hane LLC', 23, '236 Golf Course Alley', '988-288-9191', '351-297-2615', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Wintheiser, Renner and Stamm', 11, '159 Rigney Street', '949-347-6889', '104-387-4171', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Collier, Dooley and McKenzie', 21, '342 Commercial Trail', '408-783-3658', '623-715-3679', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Quitzon, Cassin and Kuphal', 28, '12 Waywood Street', '814-812-7223', '758-763-9190', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Lakin Inc', 27, '262 Sheridan Pass', '266-540-7358', '797-489-4007', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Kshlerin, Crist and Parker', 13, '3 Cherokee Road', '858-236-8820', '462-823-8960', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Dach, Murazik and Smitham', 24, '0 Ohio Center', '446-883-5029', '851-969-2055', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Williamson Group', 12, '00 Russell Drive', '830-135-4921', '484-914-9526', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Hoppe-Homenick', 18, '1 Troy Way', '361-232-7421', '704-316-1740', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Trantow, Quigley and Fahey', 12, '83 High Crossing Way', '696-322-5110', '400-538-6895', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Koss, Lindgren and Beatty', 1, '985 John Wall Court', '581-371-2320', '783-580-7465', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Koelpin, Miller and Green', 12, '645 Florence Court', '304-287-6781', '526-855-3292', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Medhurst Group', 17, '713 Kennedy Drive', '729-157-9366', '467-785-3947', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Bahringer, Orn and Romaguera', 6, '76202 Clarendon Way', '403-696-5415', '721-793-8464', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Howe-Schuster', 1, '752 Reinke Lane', '135-407-9906', '526-491-8212', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Schumm LLC', 2, '41 Schmedeman Center', '749-676-5758', '168-865-2893', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Zemlak and Sons', 3, '612 Mendota Center', '607-490-1428', '552-531-2616', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Friesen-Wolff', 23, '1 Alpine Parkway', '419-448-5988', '878-484-2956', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Williamson, Bins and Vandervort', 7, '74 American Ash Trail', '759-490-4104', '360-872-2647', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Nikolaus Group', 12, '89634 Holy Cross Road', '148-984-9572', '251-574-1582', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Klocko-Parisian', 2, '359 Crescent Oaks Court', '402-303-7286', '419-163-8991', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Upton Group', 24, '253 Jay Parkway', '724-744-9757', '445-941-5077', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Wiza Inc', 21, '461 Ohio Avenue', '244-169-1401', '962-830-9387', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Fisher, Beier and Runte', 1, '601 Bluejay Court', '917-383-2076', '847-689-6950', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Stokes, Prohaska and Hilpert', 10, '77263 Weeping Birch Court', '351-277-0806', '606-482-4096', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Weimann and Sons', 5, '870 8th Plaza', '529-299-2279', '827-557-6488', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Kuhlman, Wintheiser and Greenfelder', 14, '7 Barby Terrace', '377-981-3976', '320-355-6025', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Romaguera-Jast', 19, '42524 Steensland Trail', '626-434-7443', '393-764-0884', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Stokes-Considine', 4, '301 1st Crossing', '847-115-9507', '883-364-7536', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Boyle-Kub', 25, '24 Westport Point', '217-247-6939', '843-583-7303', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Hilll-Mraz', 3, '096 Emmet Terrace', '965-211-4983', '267-441-5443', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Gleason, Cruickshank and Hammes', 11, '25 Meadow Valley Point', '298-373-6358', '528-121-8350', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Reichel-Gulgowski', 1, '74940 Coleman Crossing', '269-443-4132', '982-610-6983', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Hyatt Group', 13, '372 Coolidge Park', '860-537-5368', '283-191-7523', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Halvorson-Pfannerstill', 15, '43 Tennyson Avenue', '446-711-4965', '863-793-0396', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Willms and Sons', 26, '58 Katie Court', '554-586-9159', '611-529-6948', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('McCullough Inc', 23, '313 Jana Parkway', '438-931-8374', '511-581-9641', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Farrell-Moore', 10, '0092 Sundown Junction', '308-621-8341', '278-242-9989', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Schoen, Reinger and Rodriguez', 5, '00 Nobel Road', '701-673-9158', '365-809-1903', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Stark and Sons', 22, '4 Stoughton Avenue', '181-315-2841', '161-310-6036', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Labadie and Sons', 15, '5064 Columbus Alley', '727-857-8092', '151-673-8747', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Hintz-Gaylord', 7, '604 Ohio Drive', '424-762-7424', '714-818-9964', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Rutherford-Lind', 11, '4902 Anniversary Crossing', '924-356-7186', '715-359-1135', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('King, Ledner and Moen', 4, '3 Riverside Crossing', '622-292-9814', '187-239-8601', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Bartell LLC', 19, '63575 Michigan Park', '756-325-7746', '876-735-1053', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Kuhn Inc', 22, '512 Canary Parkway', '806-830-0747', '558-548-9493', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Boyer, Beahan and Franecki', 17, '83 Swallow Center', '738-458-2531', '371-182-3476', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Kessler, Kunde and Farrell', 16, '834 4th Junction', '522-240-5795', '333-112-9052', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Hagenes, Jakubowski and Sipes', 8, '39114 Sullivan Pass', '455-531-9555', '327-829-6745', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Ortiz Group', 6, '91 Huxley Street', '598-691-3109', '331-259-7832', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Crist and Sons', 25, '8 Karstens Way', '618-703-5973', '973-461-0416', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Pollich-Mills', 13, '53819 Haas Crossing', '459-870-4609', '275-712-7897', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Botsford, Fisher and Franecki', 3, '14 Bluestem Court', '985-209-2493', '234-475-5159', 'A');
+insert into hospitals (name, region_id, address, phone, fax, state) values ('Hermann and Sons', 25, '83 Hoffman Road', '212-978-4022', '652-215-3725', 'A');
+
+-- --------------------------------------------------------------------------------------------------
+-- EMPLOYEES
+-- --------------------------------------------------------------------------------------------------
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (358, 55, 'Community Outreach Specialist', '1952-07-13', '$4029.14', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (247, 38, 'Geologist IV', '1949-07-08', '$12856.69', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (18, 44, 'Senior Cost Accountant', '1999-11-17', '$13260.92', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (31, 16, 'Biostatistician III', '2010-09-03', '$6851.01', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (96, 21, 'Desktop Support Technician', '1957-09-01', '$9786.95', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (140, 54, 'GIS Technical Architect', '1971-11-06', '$11102.65', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (226, 5, 'Computer Systems Analyst II', '1955-12-28', '$902.60', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (103, 24, 'Desktop Support Technician', '1982-12-24', '$8741.78', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (295, 25, 'Executive Secretary', '1987-01-10', '$3563.53', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (259, 19, 'VP Sales', '2003-07-10', '$4540.58', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (347, 25, 'Tax Accountant', '2015-07-27', '$12297.50', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (207, 94, 'Quality Engineer', '1940-09-28', '$3132.68', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (270, 86, 'Associate Professor', '1945-01-12', '$11576.08', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (96, 28, 'Cost Accountant', '1962-06-10', '$1947.64', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (71, 45, 'Community Outreach Specialist', '1938-08-31', '$3660.86', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (29, 16, 'Internal Auditor', '2014-08-01', '$13339.60', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (212, 69, 'Developer II', '1943-12-08', '$12829.05', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (103, 55, 'Environmental Specialist', '2000-02-26', '$4176.21', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (147, 21, 'Legal Assistant', '1955-07-20', '$10972.77', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (344, 13, 'Media Manager III', '2018-02-20', '$11390.02', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (75, 59, 'Teacher', '1975-02-28', '$1282.54', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (279, 12, 'Administrative Officer', '1983-06-23', '$13124.84', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (397, 72, 'Nurse', '1937-11-25', '$14598.51', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (352, 12, 'Mechanical Systems Engineer', '1937-03-09', '$14923.29', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (26, 65, 'Staff Accountant IV', '1953-01-26', '$14129.58', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (226, 56, 'Design Engineer', '1943-05-20', '$10948.48', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (391, 48, 'Health Coach IV', '1979-12-17', '$1052.77', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (287, 23, 'Research Nurse', '1949-11-25', '$11537.06', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (32, 55, 'Account Coordinator', '1959-10-03', '$4765.00', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (128, 16, 'Business Systems Development Analyst', '1959-01-09', '$3279.50', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (91, 82, 'Software Test Engineer I', '1989-09-06', '$1617.55', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (158, 31, 'Help Desk Technician', '2017-08-23', '$10219.25', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (253, 57, 'Design Engineer', '1984-08-25', '$15470.87', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (211, 92, 'Nurse Practicioner', '2014-09-02', '$15961.66', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (265, 26, 'Registered Nurse', '1974-07-21', '$3924.95', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (24, 62, 'Tax Accountant', '1998-06-15', '$10766.10', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (358, 2, 'Assistant Media Planner', '1993-03-26', '$4251.24', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (339, 96, 'Help Desk Technician', '1957-06-07', '$10544.02', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (240, 97, 'Tax Accountant', '1972-11-21', '$421.54', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (248, 26, 'Actuary', '1977-11-04', '$10760.85', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (145, 49, 'Technical Writer', '1938-05-08', '$12427.75', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (369, 18, 'Software Engineer II', '1941-09-02', '$4966.96', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (260, 20, 'Biostatistician IV', '2019-01-08', '$4013.28', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (11, 83, 'Clinical Specialist', '1952-06-23', '$265.68', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (175, 3, 'Systems Administrator IV', '1989-02-11', '$14938.68', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (299, 45, 'Sales Associate', '1946-11-12', '$13223.82', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (101, 92, 'Biostatistician II', '1955-01-03', '$8670.55', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (217, 66, 'Nurse Practicioner', '1942-11-28', '$10086.81', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (86, 67, 'Administrative Officer', '2013-09-26', '$8443.74', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (181, 4, 'Automation Specialist II', '1939-04-01', '$1206.76', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (155, 74, 'Programmer IV', '2002-02-11', '$8290.65', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (209, 26, 'Developer II', '1983-08-06', '$13426.36', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (184, 18, 'Financial Analyst', '1982-04-03', '$1916.91', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (149, 62, 'Accountant IV', '1955-01-03', '$12599.50', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (175, 74, 'Research Nurse', '1946-02-24', '$8811.12', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (363, 39, 'Nurse', '1959-12-02', '$12238.47', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (151, 100, 'Marketing Assistant', '1944-10-03', '$14859.65', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (112, 53, 'Human Resources Manager', '1958-03-31', '$3235.94', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (101, 91, 'Payment Adjustment Coordinator', '1969-09-04', '$13224.77', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (43, 33, 'Civil Engineer', '1981-11-10', '$3430.72', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (212, 55, 'Environmental Tech', '1968-10-14', '$11621.38', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (228, 7, 'Budget/Accounting Analyst I', '1994-11-28', '$13180.95', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (123, 68, 'Community Outreach Specialist', '1969-11-13', '$11768.89', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (321, 44, 'Nuclear Power Engineer', '1943-11-07', '$8409.67', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (187, 89, 'Physical Therapy Assistant', '1976-05-16', '$273.03', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (234, 12, 'Human Resources Manager', '1943-03-03', '$14403.82', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (158, 40, 'Administrative Assistant I', '1974-03-01', '$1578.54', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (297, 1, 'Structural Engineer', '2009-07-07', '$15093.12', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (115, 41, 'Sales Representative', '1976-12-10', '$10888.15', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (221, 57, 'Senior Financial Analyst', '1957-11-19', '$357.15', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (171, 88, 'Help Desk Technician', '1982-10-18', '$2933.47', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (86, 34, 'Assistant Media Planner', '1971-12-20', '$611.78', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (324, 21, 'Help Desk Technician', '1961-11-12', '$4627.13', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (71, 21, 'Civil Engineer', '1984-08-15', '$10140.65', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (142, 44, 'Operator', '2013-02-09', '$15775.74', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (138, 82, 'Human Resources Assistant I', '2009-05-03', '$14146.73', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (98, 93, 'Accounting Assistant II', '1984-12-13', '$4771.53', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (269, 25, 'Technical Writer', '2020-09-25', '$832.31', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (132, 74, 'Paralegal', '1962-07-01', '$6170.35', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (151, 2, 'Editor', '2012-10-27', '$11992.19', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (180, 45, 'Administrative Assistant IV', '2012-11-17', '$6287.96', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (69, 86, 'Financial Analyst', '1985-03-08', '$12673.80', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (174, 27, 'Staff Scientist', '1970-06-13', '$4560.63', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (27, 44, 'Environmental Specialist', '1977-04-01', '$3718.77', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (207, 68, 'Physical Therapy Assistant', '2014-10-21', '$10780.13', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (301, 69, 'Administrative Officer', '1936-08-26', '$3076.53', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (327, 12, 'Systems Administrator III', '2001-01-05', '$10382.60', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (289, 50, 'Research Assistant I', '2001-01-17', '$6227.35', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (361, 50, 'Software Engineer III', '1954-03-28', '$1242.86', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (332, 45, 'Software Engineer IV', '2005-12-24', '$15874.61', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (154, 58, 'Engineer IV', '1960-08-27', '$12929.86', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (187, 16, 'Quality Engineer', '1940-05-05', '$12364.76', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (333, 92, 'Assistant Manager', '1975-04-02', '$3387.32', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (48, 28, 'Recruiter', '1956-11-12', '$9728.74', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (130, 26, 'Programmer Analyst III', '1986-07-01', '$9719.96', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (21, 31, 'Office Assistant I', '1938-11-04', '$14301.57', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (285, 54, 'Environmental Specialist', '1974-03-30', '$1080.45', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (282, 52, 'Paralegal', '1982-02-07', '$8633.12', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (245, 72, 'Project Manager', '1997-12-19', '$8953.36', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (208, 19, 'Geologist I', '1989-06-18', '$5784.56', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (33, 44, 'Analyst Programmer', '2000-06-27', '$14434.94', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (18, 29, 'Help Desk Operator', '1972-02-24', '$4320.06', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (170, 40, 'Recruiter', '1942-12-04', '$11147.60', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (394, 15, 'Cost Accountant', '1988-11-18', '$1891.60', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (375, 33, 'Staff Accountant I', '1999-03-06', '$8125.84', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (37, 32, 'Geologist II', '1960-08-07', '$8493.65', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (368, 99, 'Project Manager', '1944-01-30', '$10637.06', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (150, 12, 'Community Outreach Specialist', '1973-01-21', '$1726.89', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (374, 75, 'Software Engineer III', '1966-09-18', '$3985.57', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (214, 46, 'Accounting Assistant I', '1956-11-04', '$3083.34', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (345, 84, 'Assistant Professor', '1993-11-17', '$11818.42', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (321, 17, 'Senior Sales Associate', '1947-06-11', '$14974.42', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (23, 90, 'General Manager', '1991-04-13', '$15643.70', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (30, 23, 'Health Coach II', '1969-04-01', '$2366.10', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (286, 44, 'Nurse', '2002-11-14', '$12625.21', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (59, 70, 'Senior Editor', '1968-07-01', '$12304.51', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (91, 40, 'Chief Design Engineer', '1984-07-27', '$5710.56', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (113, 3, 'Community Outreach Specialist', '1953-09-01', '$2387.44', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (18, 66, 'Legal Assistant', '1957-09-23', '$3752.26', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (193, 86, 'Accounting Assistant IV', '2012-04-12', '$4188.59', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (83, 89, 'Quality Control Specialist', '1986-12-20', '$14263.73', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (222, 46, 'Speech Pathologist', '1950-03-19', '$10186.40', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (139, 47, 'Social Worker', '1980-03-08', '$8709.46', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (387, 19, 'Senior Sales Associate', '1936-03-21', '$1414.88', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (361, 33, 'Technical Writer', '1952-11-02', '$7602.08', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (349, 17, 'Compensation Analyst', '2002-03-11', '$14199.62', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (174, 31, 'Librarian', '1967-05-26', '$1410.92', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (279, 85, 'Operator', '2020-06-29', '$5352.86', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (393, 78, 'VP Sales', '2009-07-02', '$15129.29', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (160, 19, 'Human Resources Assistant II', '2010-04-29', '$11388.40', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (341, 5, 'Help Desk Operator', '1961-04-10', '$3889.07', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (252, 28, 'GIS Technical Architect', '1957-07-17', '$869.85', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (244, 81, 'Mechanical Systems Engineer', '1999-12-26', '$8068.91', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (299, 39, 'Safety Technician III', '1944-05-03', '$11235.49', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (4, 32, 'Geological Engineer', '2011-06-25', '$5047.04', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (154, 23, 'General Manager', '1953-01-17', '$2713.10', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (266, 31, 'Teacher', '1952-07-07', '$7860.80', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (339, 16, 'Nurse', '2019-11-13', '$2494.42', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (116, 100, 'Paralegal', '1973-11-15', '$12188.14', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (197, 2, 'Geological Engineer', '1985-09-08', '$13541.86', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (173, 71, 'Director of Sales', '1955-12-27', '$11054.92', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (121, 62, 'Environmental Specialist', '2016-06-28', '$14818.72', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (375, 51, 'Operator', '2011-01-25', '$490.83', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (326, 87, 'Account Coordinator', '1968-03-21', '$2464.04', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (344, 55, 'Payment Adjustment Coordinator', '1939-09-08', '$10801.06', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (172, 54, 'Web Developer II', '1972-11-16', '$11019.34', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (147, 18, 'VP Marketing', '2018-07-17', '$14749.91', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (227, 90, 'Associate Professor', '1994-09-08', '$14839.79', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (206, 47, 'Quality Control Specialist', '1984-09-23', '$13394.62', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (158, 19, 'Computer Systems Analyst IV', '1963-10-18', '$1125.05', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (366, 43, 'Research Associate', '2006-04-04', '$2081.24', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (283, 44, 'Civil Engineer', '1969-04-04', '$14045.87', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (183, 95, 'Software Consultant', '2010-06-21', '$3745.01', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (386, 27, 'Account Executive', '1966-07-13', '$3054.94', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (105, 89, 'Sales Representative', '1950-12-22', '$8755.97', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (62, 71, 'Programmer Analyst III', '2015-10-09', '$3075.14', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (99, 37, 'Technical Writer', '1991-03-27', '$3528.22', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (58, 96, 'Staff Accountant III', '1951-08-21', '$1417.36', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (188, 17, 'Human Resources Assistant IV', '1965-06-23', '$1263.03', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (280, 55, 'Marketing Manager', '2002-04-13', '$3515.15', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (195, 42, 'Pharmacist', '1949-12-26', '$5485.35', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (196, 23, 'Help Desk Operator', '1957-10-10', '$1168.83', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (189, 47, 'Statistician III', '1936-10-22', '$5625.39', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (82, 88, 'Administrative Officer', '1963-11-12', '$14655.47', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (354, 17, 'Technical Writer', '1973-10-03', '$13682.49', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (211, 49, 'Media Manager II', '1974-10-24', '$4795.85', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (139, 38, 'Financial Advisor', '2003-11-01', '$12613.09', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (262, 92, 'Database Administrator IV', '1945-04-07', '$1696.02', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (174, 85, 'Media Manager II', '2011-01-12', '$10426.05', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (125, 50, 'Senior Cost Accountant', '1984-08-25', '$1331.84', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (340, 82, 'Software Test Engineer I', '2001-07-11', '$6154.57', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (129, 98, 'Financial Advisor', '1976-01-25', '$15681.79', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (123, 17, 'Speech Pathologist', '2002-12-21', '$5281.41', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (109, 1, 'Recruiter', '1981-07-28', '$8959.58', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (56, 20, 'Software Consultant', '1942-09-08', '$1243.86', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (75, 6, 'Physical Therapy Assistant', '1977-03-04', '$9731.05', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (377, 98, 'Research Nurse', '1967-11-21', '$6179.04', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (57, 92, 'Director of Sales', '1959-08-28', '$3693.77', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (116, 84, 'Help Desk Technician', '2014-07-03', '$9582.75', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (333, 71, 'Assistant Professor', '2020-10-23', '$4427.12', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (374, 44, 'Professor', '1962-08-12', '$8970.42', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (329, 9, 'Accountant IV', '2003-10-26', '$9231.22', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (235, 77, 'GIS Technical Architect', '2003-05-07', '$13074.62', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (228, 41, 'Analog Circuit Design manager', '2010-12-07', '$7360.03', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (179, 72, 'Professor', '1976-10-31', '$11428.20', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (213, 79, 'Project Manager', '2003-12-22', '$15567.00', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (68, 47, 'Developer IV', '1986-03-24', '$15592.76', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (282, 53, 'Research Assistant I', '1955-10-25', '$13319.61', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (164, 50, 'Recruiter', '1992-05-20', '$5400.58', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (354, 58, 'Junior Executive', '1998-05-06', '$2907.40', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (258, 26, 'Software Consultant', '1981-11-16', '$8223.24', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (349, 94, 'Operator', '1961-07-18', '$1689.89', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (355, 8, 'Product Engineer', '2014-03-27', '$10249.06', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (288, 11, 'Assistant Media Planner', '1940-07-20', '$4303.64', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (53, 37, 'Information Systems Manager', '2015-10-11', '$5788.28', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (143, 94, 'Actuary', '1957-02-05', '$13526.55', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (202, 56, 'Chief Design Engineer', '2001-06-09', '$13532.21', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (50, 14, 'Environmental Specialist', '2005-08-27', '$7227.23', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (125, 2, 'Compensation Analyst', '1944-09-16', '$3471.01', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (2, 65, 'Information Systems Manager', '2019-10-13', '$11751.19', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (126, 13, 'Structural Engineer', '2019-11-23', '$10957.13', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (194, 56, 'Operator', '2014-10-30', '$11711.85', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (143, 69, 'Senior Developer', '1982-08-24', '$5956.36', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (271, 98, 'Account Coordinator', '1938-06-08', '$4298.28', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (17, 89, 'Automation Specialist II', '2009-01-15', '$10524.68', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (314, 61, 'Director of Sales', '2006-01-06', '$3331.47', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (87, 15, 'Engineer III', '1977-09-03', '$13803.53', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (204, 87, 'Accounting Assistant I', '1936-09-12', '$14558.29', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (165, 44, 'Sales Representative', '1948-08-24', '$7931.97', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (107, 31, 'Clinical Specialist', '1976-01-02', '$11394.43', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (64, 61, 'Accountant I', '1967-10-02', '$11180.74', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (334, 10, 'Nurse Practicioner', '2001-03-09', '$4823.66', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (285, 2, 'Environmental Specialist', '1973-03-22', '$13077.54', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (194, 98, 'Senior Quality Engineer', '1959-03-23', '$14756.70', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (314, 8, 'Data Coordiator', '1951-03-20', '$14075.16', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (14, 95, 'Junior Executive', '1969-01-13', '$7772.63', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (383, 67, 'Budget/Accounting Analyst II', '2005-12-10', '$3775.50', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (132, 91, 'Mechanical Systems Engineer', '1976-03-25', '$10270.35', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (270, 20, 'Project Manager', '1958-08-09', '$5386.84', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (99, 30, 'Staff Scientist', '1938-04-08', '$6907.23', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (149, 48, 'Web Designer II', '1957-05-05', '$2960.96', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (296, 28, 'Environmental Specialist', '2011-09-20', '$13697.19', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (115, 86, 'Editor', '1969-05-07', '$10960.42', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (20, 71, 'Media Manager I', '1943-02-20', '$12991.38', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (255, 71, 'Senior Sales Associate', '1959-08-20', '$3049.78', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (398, 95, 'Computer Systems Analyst IV', '2007-09-18', '$2938.31', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (142, 1, 'GIS Technical Architect', '2002-04-25', '$1346.59', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (21, 66, 'Internal Auditor', '1961-05-04', '$11738.29', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (266, 85, 'Electrical Engineer', '1946-02-01', '$8374.94', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (28, 14, 'Help Desk Operator', '1947-12-02', '$5453.54', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (216, 24, 'Research Assistant IV', '1963-12-01', '$14051.82', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (172, 35, 'Project Manager', '1991-02-03', '$5046.08', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (312, 6, 'Software Consultant', '1954-03-28', '$3471.96', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (313, 25, 'VP Accounting', '1963-07-30', '$10995.15', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (61, 22, 'Senior Quality Engineer', '1968-04-17', '$8074.76', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (78, 84, 'Senior Editor', '1997-10-27', '$7072.19', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (290, 54, 'Account Coordinator', '1976-01-16', '$13377.28', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (350, 29, 'Administrative Assistant I', '1967-04-11', '$2090.39', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (252, 73, 'VP Sales', '1940-03-06', '$38.92', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (384, 87, 'Dental Hygienist', '2007-07-20', '$6066.84', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (367, 27, 'Help Desk Operator', '2006-07-15', '$3735.00', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (199, 4, 'Human Resources Manager', '1975-03-03', '$9458.67', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (127, 93, 'Analog Circuit Design manager', '2016-05-02', '$9545.13', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (210, 25, 'Registered Nurse', '1987-03-14', '$13809.02', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (145, 47, 'Editor', '1950-03-15', '$15142.22', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (102, 4, 'Information Systems Manager', '1975-03-18', '$706.36', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (60, 50, 'Account Executive', '1937-09-28', '$8497.72', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (138, 32, 'Community Outreach Specialist', '1957-06-07', '$7323.37', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (180, 52, 'Research Nurse', '1968-06-05', '$2058.61', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (65, 52, 'Speech Pathologist', '1967-06-01', '$8198.17', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (339, 78, 'Operator', '1996-02-12', '$4757.47', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (64, 25, 'Programmer Analyst IV', '1954-09-23', '$38.30', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (304, 50, 'Analog Circuit Design manager', '1943-10-12', '$9474.20', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (308, 61, 'Budget/Accounting Analyst IV', '1983-06-11', '$7172.33', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (257, 11, 'Analyst Programmer', '1964-02-27', '$5294.65', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (13, 67, 'Graphic Designer', '1936-01-31', '$15021.71', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (5, 74, 'Account Executive', '1969-11-17', '$7605.96', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (269, 37, 'Mechanical Systems Engineer', '1978-06-19', '$7708.42', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (383, 79, 'Web Designer I', '2011-09-23', '$11806.91', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (114, 85, 'Librarian', '1945-04-14', '$15625.00', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (115, 96, 'Human Resources Assistant I', '1965-10-03', '$6281.70', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (17, 8, 'Web Designer II', '1986-10-29', '$4240.87', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (69, 8, 'Senior Cost Accountant', '2015-05-28', '$12911.87', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (384, 57, 'Occupational Therapist', '1981-12-12', '$397.07', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (219, 51, 'Speech Pathologist', '2012-07-06', '$13271.20', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (378, 47, 'Librarian', '1948-09-14', '$10298.21', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (360, 32, 'VP Quality Control', '1978-10-30', '$3559.71', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (88, 67, 'Senior Editor', '1993-02-19', '$11308.57', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (392, 70, 'Staff Scientist', '1988-07-29', '$3821.19', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (105, 77, 'Analog Circuit Design manager', '1982-07-29', '$14525.03', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (16, 96, 'Senior Developer', '1993-10-23', '$10267.83', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (275, 22, 'Safety Technician II', '1954-11-23', '$4996.01', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (367, 41, 'Product Engineer', '1996-03-05', '$5750.26', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (167, 12, 'Information Systems Manager', '1980-12-28', '$13475.43', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (183, 63, 'Assistant Professor', '1952-04-30', '$7323.32', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (55, 97, 'Human Resources Assistant I', '1993-03-14', '$2431.74', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (132, 100, 'Administrative Assistant II', '1982-01-31', '$13575.91', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (368, 82, 'Senior Sales Associate', '1988-07-02', '$2167.89', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (343, 39, 'Food Chemist', '1977-12-05', '$13153.73', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (136, 45, 'Dental Hygienist', '1936-08-30', '$13495.03', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (368, 91, 'Project Manager', '1977-11-19', '$11892.39', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (342, 17, 'Nurse Practicioner', '1984-07-02', '$8712.89', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (361, 14, 'Programmer III', '2012-05-09', '$923.09', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (266, 25, 'Budget/Accounting Analyst IV', '1998-08-19', '$7089.61', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (229, 6, 'Web Developer I', '2009-01-14', '$9015.39', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (22, 19, 'Budget/Accounting Analyst IV', '1955-08-30', '$3172.41', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (21, 27, 'Health Coach III', '1977-09-29', '$8139.62', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (192, 94, 'Research Assistant II', '2016-12-08', '$13615.52', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (17, 60, 'Mechanical Systems Engineer', '1993-08-29', '$3097.36', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (348, 42, 'Human Resources Assistant II', '1978-04-17', '$13363.46', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (164, 27, 'Editor', '1957-03-18', '$2825.33', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (96, 99, 'Accounting Assistant I', '2007-02-18', '$14990.79', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (301, 94, 'VP Accounting', '1968-08-12', '$8353.37', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (286, 97, 'Chief Design Engineer', '1974-06-26', '$8875.73', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (365, 64, 'Statistician IV', '1975-11-25', '$15648.60', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (265, 90, 'Senior Financial Analyst', '1974-11-30', '$9043.03', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (157, 61, 'Pharmacist', '1989-11-30', '$13035.13', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (121, 45, 'Budget/Accounting Analyst III', '1947-10-24', '$15488.29', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (75, 38, 'Data Coordiator', '1979-10-03', '$5557.02', 'A');
+insert into employees (person_id, hospital_id, job_title, start_date, salary, state) values (180, 52, 'Research Associate', '1939-04-12', '$15748.65', 'A');
+
+-- --------------------------------------------------------------------------------------------------
+-- PROCEDURE TYPES - 
+-- --------------------------------------------------------------------------------------------------
+insert into procedure_types (name) VALUES ('Abdominoplasty (Tummy Tuck ( Abdominoplasty))');
+insert into procedure_types (name) VALUES ('Ablation Therapy for Arrhythmias');
+insert into procedure_types (name) VALUES ('Ablation, Endometrial (Endometrial Ablation)');
+insert into procedure_types (name) VALUES ('Ablation, Uterus (Endometrial Ablation)');
+insert into procedure_types (name) VALUES ('Abnormal Liver Enzymes (Liver Blood Tests)');
+insert into procedure_types (name) VALUES ('Absorbent Products Incontinence (Urinary Incontinence Products for Men)');
+insert into procedure_types (name) VALUES ('Abstinence Method of Birth Control (Natural Methods of Birth Control)');
+insert into procedure_types (name) VALUES ('Acupuncture');
+insert into procedure_types (name) VALUES ('Adenoidectomy Surgical Instructions');
+insert into procedure_types (name) VALUES ('Adenosine (Exercise Stress Test)');
+insert into procedure_types (name) VALUES ('Adenosine Stress Test For Heart Disease (Coronary Artery Disease Screening Tests (CAD))');
+insert into procedure_types (name) VALUES ('AFP Blood Test (Alpha-fetoprotein Blood Test)');
+insert into procedure_types (name) VALUES ('After a Laparoscopic Ovarian Cystectomy');
+insert into procedure_types (name) VALUES ('Alexander Technique for Childbirth (Childbirth Class Options)');
+insert into procedure_types (name) VALUES ('ALK (Keratoplasty Eye Surgery (ALK))');
+insert into procedure_types (name) VALUES ('Allergy Shots');
+insert into procedure_types (name) VALUES ('Allergy, Skin Test (Skin Test For Allergy)');
+insert into procedure_types (name) VALUES ('Alpha-fetoprotein Blood Test');
+insert into procedure_types (name) VALUES ('ALT Test (Liver Blood Tests)');
+insert into procedure_types (name) VALUES ('AMA (Antimitochondrial Antibodies)');
+insert into procedure_types (name) VALUES ('Amino Acid, Homocysteine (Homocysteine)');
+insert into procedure_types (name) VALUES ('Amniocentesis');
+insert into procedure_types (name) VALUES ('Amniotic Fluid (Amniocentesis)');
+insert into procedure_types (name) VALUES ('ANA (Antinuclear Antibody)');
+insert into procedure_types (name) VALUES ('Analysis of Urine (Urinalysis)');
+insert into procedure_types (name) VALUES ('Angiogram Of Heart (Coronary Angiogram)');
+insert into procedure_types (name) VALUES ('Angioplasty (Coronary Angioplasty)');
+insert into procedure_types (name) VALUES ('Annulus Support (Heart Valve Disease Treatment)');
+insert into procedure_types (name) VALUES ('Anti-CCP (Citrulline Antibody)');
+insert into procedure_types (name) VALUES ('Anti-citrulline Antibody (Citrulline Antibody)');
+insert into procedure_types (name) VALUES ('Anti-cyclic Citrullinated Peptide Antibody (Citrulline Antibody)');
+insert into procedure_types (name) VALUES ('Anti-Reflux Surgery (Fundoplication)');
+insert into procedure_types (name) VALUES ('Antibiotic Prophylactic Regimens for Endocarditis');
+insert into procedure_types (name) VALUES ('Antimicrosomal Antibody Test (Thyroid Peroxidase Test)');
+insert into procedure_types (name) VALUES ('Antimitochondrial Antibodies');
+insert into procedure_types (name) VALUES ('Antinuclear Antibody');
+insert into procedure_types (name) VALUES ('Antithyroid Microsomal Antibody Test (Thyroid Peroxidase Test)');
+insert into procedure_types (name) VALUES ('Antro-duodenal Motility Study');
+insert into procedure_types (name) VALUES ('Aortic Heart Valve Replacement (Heart Valve Disease Treatment)');
+insert into procedure_types (name) VALUES ('Apgar Score');
+insert into procedure_types (name) VALUES ('Appendectomy');
+insert into procedure_types (name) VALUES ('Appendectomy recovery complications prognosis');
+insert into procedure_types (name) VALUES ('Are Lazy Eyes Genetic');
+insert into procedure_types (name) VALUES ('Are Pancreas Transplants Successful?');
+insert into procedure_types (name) VALUES ('Arrhythmia Treatment (Ablation Therapy for Arrhythmias)');
+insert into procedure_types (name) VALUES ('Arthritis Physical and Occupational Therapy');
+insert into procedure_types (name) VALUES ('Arthrocentesis (Joint Aspiration)');
+insert into procedure_types (name) VALUES ('Arthroplasty (Joint Replacement Surgery Of The Hand)');
+insert into procedure_types (name) VALUES ('Arthroscopy');
+insert into procedure_types (name) VALUES ('Artificial Kidney (Hemodialysis)');
+insert into procedure_types (name) VALUES ('Back Surgery (Minimally Invasive Lumbar Spinal Fusion)');
+insert into procedure_types (name) VALUES ('Baclofen Pump Therapy');
+insert into procedure_types (name) VALUES ('Bad Cholesterol Test (Cholesterol Test)');
+insert into procedure_types (name) VALUES ('Balloon Angioplasty Of Heart (Coronary Angioplasty)');
+insert into procedure_types (name) VALUES ('Balloon Endoscopy');
+insert into procedure_types (name) VALUES ('Balloon Enteroscopy (Balloon Endoscopy)');
+insert into procedure_types (name) VALUES ('Balloon Valvuloplasty (Heart Valve Disease Treatment)');
+insert into procedure_types (name) VALUES ('Barium Enema');
+insert into procedure_types (name) VALUES ('Barium Swallow (Upper GI Series)');
+insert into procedure_types (name) VALUES ('Barrier Methods of Birth Control');
+insert into procedure_types (name) VALUES ('Basal Body Temperature Method of Birth Control (Natural Methods of Birth Control)');
+insert into procedure_types (name) VALUES ('Bicarbonate (Electrolytes)');
+insert into procedure_types (name) VALUES ('Biliary Drainage (Duodenal Biliary Drainage)');
+insert into procedure_types (name) VALUES ('Bioelectric Therapy');
+insert into procedure_types (name) VALUES ('Biological Therapy');
+insert into procedure_types (name) VALUES ('Biological Valve (Heart Valve Disease Treatment)');
+insert into procedure_types (name) VALUES ('Biopsy Of Cervix (Colposcopy)');
+insert into procedure_types (name) VALUES ('Biopsy, Breast (Breast Biopsy)');
+insert into procedure_types (name) VALUES ('Biopsy, Liver (Liver Biopsy)');
+insert into procedure_types (name) VALUES ('Biotherapy (Biological Therapy)');
+insert into procedure_types (name) VALUES ('Birth Control Patch (Hormonal Methods of Birth Control)');
+insert into procedure_types (name) VALUES ('Birth Control Pills (Hormonal Methods of Birth Control)');
+insert into procedure_types (name) VALUES ('Birthing Classes (Pregnancy: Birthing and Parenting Classes)');
+insert into procedure_types (name) VALUES ('Biventricular Pacemaker');
+insert into procedure_types (name) VALUES ('Blepharoplasty (Eyelid Surgery)');
+insert into procedure_types (name) VALUES ('Blepharospasm Treatment, Botox (Botox Treatment)');
+insert into procedure_types (name) VALUES ('Blood Count (Complete Blood Count)');
+insert into procedure_types (name) VALUES ('Blood Liver Enzymes (Liver Blood Tests)');
+insert into procedure_types (name) VALUES ('Blood Test, Ferritin (Ferritin Blood Test)');
+insert into procedure_types (name) VALUES ('Blood Test, Thyroid (Thyroid Blood Tests)');
+insert into procedure_types (name) VALUES ('Blood Transfusion');
+insert into procedure_types (name) VALUES ('Blood White Cell Count (Complete Blood Count)');
+insert into procedure_types (name) VALUES ('Blood, Bicarbonate (Electrolytes)');
+insert into procedure_types (name) VALUES ('Blood, Chloride (Electrolytes)');
+insert into procedure_types (name) VALUES ('Blood, CO2 (Electrolytes)');
+insert into procedure_types (name) VALUES ('Blood, Electrolytes (Electrolytes)');
+insert into procedure_types (name) VALUES ('Blood, Hematocrit (Complete Blood Count)');
+insert into procedure_types (name) VALUES ('Blood, Hemoglobin (Complete Blood Count)');
+insert into procedure_types (name) VALUES ('Blood, Platelet Count (Complete Blood Count)');
+insert into procedure_types (name) VALUES ('Blood, Potassium (Electrolytes)');
+insert into procedure_types (name) VALUES ('Blood, Red Cell Count (Complete Blood Count)');
+insert into procedure_types (name) VALUES ('Blood, Sodium (Electrolytes)');
+insert into procedure_types (name) VALUES ('Blue Light Therapy (Photodynamic Therapy)');
+insert into procedure_types (name) VALUES ('Bone Density Scan');
+insert into procedure_types (name) VALUES ('Bone Marrow');
+insert into procedure_types (name) VALUES ('Bone Marrow Transplant (Peripheral Blood Stem Cell Transplant)');
+insert into procedure_types (name) VALUES ('Bone Marrow Transplant Risks Survival Prognosis');
+insert into procedure_types (name) VALUES ('Bone Marrow Transplantation for Breast Cancer');
+insert into procedure_types (name) VALUES ('Botox Injections (Botox Treatment)');
+insert into procedure_types (name) VALUES ('Botox to Treat Multiple Sclerosis (MS)');
+insert into procedure_types (name) VALUES ('Botox Treatment');
+insert into procedure_types (name) VALUES ('Botox Treatment (Botox Treatment)');
+insert into procedure_types (name) VALUES ('Bowel Diversion Surgery Ileostomy, Colostomy');
+
+-- --------------------------------------------------------------------------------------------------
+-- PROCEDURES
+-- --------------------------------------------------------------------------------------------------
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (173, 33, 53, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (123, 29, 70, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (56, 95, 81, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (150, 86, 25, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (304, 46, 54, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (185, 31, 98, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (235, 62, 15, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (361, 75, 12, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (252, 5, 5, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (285, 51, 65, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (267, 84, 4, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (14, 97, 54, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (216, 95, 102, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (18, 17, 70, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (270, 60, 14, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (157, 61, 9, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (250, 38, 53, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (199, 63, 61, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (259, 18, 30, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (252, 61, 85, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (82, 17, 72, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (18, 80, 52, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (396, 5, 38, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (117, 4, 63, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (212, 40, 55, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (11, 60, 38, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (230, 27, 103, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (282, 10, 52, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (205, 7, 40, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (316, 61, 100, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (387, 43, 10, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (253, 80, 50, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (326, 69, 55, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (131, 58, 74, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (45, 64, 92, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (178, 44, 70, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (241, 20, 79, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (216, 54, 80, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (59, 87, 66, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (400, 20, 2, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (9, 50, 66, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (230, 52, 23, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (252, 45, 7, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (163, 17, 57, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (100, 45, 60, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (306, 10, 92, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (204, 94, 1, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (371, 97, 33, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (177, 72, 33, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (4, 9, 6, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (264, 94, 36, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (392, 87, 58, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (311, 21, 57, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (186, 98, 67, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (384, 23, 27, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (387, 75, 34, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (245, 65, 80, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (270, 76, 54, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (179, 53, 57, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (304, 29, 3, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (258, 5, 56, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (328, 68, 95, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (12, 85, 24, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (156, 28, 95, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (34, 36, 53, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (255, 17, 96, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (400, 15, 77, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (154, 47, 45, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (325, 16, 7, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (240, 72, 61, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (283, 27, 76, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (185, 26, 57, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (33, 96, 88, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (227, 2, 38, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (276, 26, 9, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (50, 60, 24, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (85, 21, 71, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (253, 74, 33, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (112, 65, 84, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (329, 8, 70, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (292, 67, 96, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (141, 78, 94, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (276, 70, 7, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (57, 73, 85, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (224, 24, 58, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (6, 16, 23, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (15, 11, 49, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (166, 47, 90, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (390, 97, 17, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (248, 32, 96, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (193, 75, 96, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (169, 94, 62, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (349, 25, 51, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (103, 3, 80, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (275, 44, 24, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (143, 9, 92, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (200, 10, 71, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (244, 78, 39, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (291, 89, 84, 'W');
+insert into procedures (patient_id, hospital_id, procedure_type_id, status) values (265, 93, 53, 'W');
+
+-- --------------------------------------------------------------------------------------------------
+-- PROCEDURE_DOCTORS
+-- --------------------------------------------------------------------------------------------------
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (1, 224, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (2, 130, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (3, 194, 'Construction Foreman', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (4, 279, 'Construction Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (5, 178, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (6, 204, 'Construction Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (7, 55, 'Subcontractor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (8, 280, 'Supervisor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (9, 35, 'Construction Expeditor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (10, 264, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (11, 287, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (12, 145, 'Electrician', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (13, 51, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (14, 300, 'Surveyor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (15, 137, 'Supervisor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (16, 220, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (17, 165, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (18, 28, 'Engineer', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (19, 226, 'Surveyor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (20, 95, 'Engineer', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (21, 174, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (22, 285, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (23, 139, 'Construction Expeditor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (24, 275, 'Subcontractor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (25, 258, 'Construction Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (26, 105, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (27, 259, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (28, 40, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (29, 172, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (30, 109, 'Supervisor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (31, 107, 'Surveyor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (32, 132, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (33, 120, 'Construction Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (34, 232, 'Construction Expeditor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (35, 147, 'Engineer', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (36, 148, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (37, 267, 'Construction Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (38, 219, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (39, 205, 'Electrician', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (40, 228, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (41, 42, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (42, 173, 'Electrician', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (43, 109, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (44, 286, 'Engineer', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (45, 264, 'Construction Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (46, 102, 'Surveyor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (47, 167, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (48, 104, 'Surveyor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (49, 285, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (50, 148, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (51, 223, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (52, 263, 'Construction Foreman', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (53, 165, 'Engineer', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (54, 3, 'Supervisor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (55, 47, 'Subcontractor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (56, 246, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (57, 17, 'Construction Expeditor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (58, 148, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (59, 252, 'Construction Foreman', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (60, 179, 'Surveyor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (61, 221, 'Surveyor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (62, 86, 'Construction Foreman', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (63, 42, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (64, 20, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (65, 198, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (66, 277, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (67, 294, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (68, 163, 'Construction Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (69, 43, 'Construction Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (70, 168, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (71, 241, 'Construction Expeditor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (72, 27, 'Subcontractor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (73, 137, 'Surveyor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (74, 55, 'Subcontractor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (75, 276, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (76, 65, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (77, 90, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (78, 281, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (79, 245, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (80, 14, 'Engineer', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (81, 286, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (82, 40, 'Subcontractor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (83, 119, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (84, 119, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (85, 62, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (86, 76, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (87, 162, 'Subcontractor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (88, 198, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (89, 298, 'Construction Foreman', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (90, 223, 'Construction Foreman', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (91, 216, 'Surveyor', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (92, 146, 'Project Manager', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (93, 220, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (94, 265, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (95, 84, 'Construction Foreman', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (96, 211, 'Architect', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (97, 167, 'Construction Worker', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (98, 19, 'Estimator', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (99, 276, 'Electrician', 'W');
+insert into procedure_doctors (procedure_id, doctor_id, doctor_role, status) values (100, 119, 'Engineer', 'W');
+
+-- --------------------------------------------------------------------------------------------------
+-- BLOOD_DRAWINGS
+-- --------------------------------------------------------------------------------------------------
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (10, 2, 100, '2021-02-13', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (90, 6, 100, '2022-01-06', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (93, 1, 300, '2020-09-11', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (18, 3, 400, '2024-05-08', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (12, 2, 500, '2026-03-27', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (71, 7, 500, '2020-08-26', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (45, 5, 100, '2025-05-12', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (31, 5, 100, '2023-03-30', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (28, 2, 300, '2020-07-23', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (46, 5, 500, '2024-01-22', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (34, 2, 200, '2025-02-12', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (23, 1, 100, '2025-04-11', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (71, 3, 400, '2025-10-04', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (84, 2, 100, '2025-07-31', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (83, 7, 500, '2024-09-26', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (65, 6, 100, '2023-04-14', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (78, 5, 100, '2023-03-05', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (22, 4, 300, '2022-03-10', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (45, 7, 300, '2023-06-30', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (36, 7, 300, '2025-11-01', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (5, 6, 400, '2022-05-13', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (32, 2, 300, '2025-03-06', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (19, 3, 200, '2022-09-05', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (33, 6, 200, '2024-11-02', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (27, 3, 200, '2025-03-18', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (86, 8, 100, '2021-09-12', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (45, 3, 200, '2024-07-13', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (53, 5, 300, '2022-01-09', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (79, 5, 200, '2024-06-14', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (73, 3, 400, '2025-08-28', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (25, 2, 500, '2022-12-30', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (72, 2, 300, '2025-10-15', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (37, 6, 200, '2023-08-19', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (62, 4, 100, '2022-01-20', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (39, 2, 400, '2024-09-08', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (23, 2, 300, '2021-07-16', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (72, 3, 500, '2021-12-29', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (81, 7, 400, '2024-07-01', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (38, 3, 200, '2023-01-10', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (59, 4, 400, '2025-04-27', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (33, 8, 300, '2020-12-20', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (29, 7, 100, '2025-02-14', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (91, 1, 200, '2021-11-04', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (52, 3, 300, '2024-04-08', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (35, 5, 200, '2021-10-24', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (35, 3, 100, '2021-01-10', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (81, 5, 400, '2025-08-30', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (74, 4, 500, '2026-04-08', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (11, 7, 400, '2024-08-21', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (76, 3, 100, '2024-03-28', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (48, 6, 100, '2025-06-12', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (79, 2, 300, '2022-05-10', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (60, 8, 200, '2024-07-01', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (93, 5, 200, '2024-01-08', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (69, 2, 300, '2025-05-18', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (82, 4, 200, '2024-09-28', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (70, 5, 300, '2023-02-21', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (64, 2, 300, '2024-08-28', 'A');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (28, 2, 400, '2021-02-16', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (86, 5, 400, '2024-09-17', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (67, 2, 500, '2021-06-02', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (30, 6, 400, '2022-09-15', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (19, 1, 300, '2021-02-11', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (9, 5, 300, '2025-10-02', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (15, 2, 500, '2026-04-03', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (100, 3, 300, '2020-11-29', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (34, 3, 500, '2022-07-12', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (7, 4, 100, '2023-09-23', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (84, 1, 200, '2025-03-26', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (28, 4, 100, '2023-05-06', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (71, 3, 400, '2025-08-20', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (46, 2, 100, '2020-09-14', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (4, 6, 500, '2021-01-26', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (85, 6, 500, '2023-02-11', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (34, 1, 300, '2024-04-09', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (58, 7, 500, '2022-11-06', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (25, 4, 400, '2022-03-16', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (76, 2, 300, '2022-09-28', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (61, 8, 200, '2021-07-18', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (48, 4, 100, '2022-11-12', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (34, 5, 300, '2025-11-30', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (7, 8, 300, '2025-12-23', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (99, 2, 500, '2023-04-19', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (51, 4, 400, '2022-04-08', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (80, 4, 200, '2022-02-04', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (57, 5, 100, '2021-09-07', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (88, 3, 200, '2025-12-08', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (5, 4, 300, '2024-11-10', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (81, 6, 300, '2023-12-16', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (87, 1, 300, '2022-06-17', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (68, 5, 500, '2022-04-25', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (8, 6, 100, '2025-01-20', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (59, 5, 200, '2024-05-18', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (88, 6, 200, '2024-07-30', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (82, 8, 200, '2026-02-20', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (100, 1, 100, '2024-09-24', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (21, 8, 300, '2021-12-13', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (91, 6, 100, '2022-01-12', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (16, 1, 300, '2020-07-18', 'D');
+insert into blood_drawings (procedure_id, blood_group_id, amount, expiry_date, status) values (84, 5, 500, '2022-01-14', 'D');
+
+-- --------------------------------------------------------------------------------------------------
+-- BLOOD_DONATIONS
+-- --------------------------------------------------------------------------------------------------
+insert into blood_donations (procedure_id, drawing_id) values (28, 59);
+insert into blood_donations (procedure_id, drawing_id) values (86, 60);
+insert into blood_donations (procedure_id, drawing_id) values (67, 61);
+insert into blood_donations (procedure_id, drawing_id) values (30, 62);
+insert into blood_donations (procedure_id, drawing_id) values (19, 63);
+insert into blood_donations (procedure_id, drawing_id) values (9, 64);
+insert into blood_donations (procedure_id, drawing_id) values (15, 65);
+insert into blood_donations (procedure_id, drawing_id) values (100, 66);
+insert into blood_donations (procedure_id, drawing_id) values (34, 67);
+insert into blood_donations (procedure_id, drawing_id) values (7, 68);
+insert into blood_donations (procedure_id, drawing_id) values (84, 69);
+insert into blood_donations (procedure_id, drawing_id) values (28, 70);
+insert into blood_donations (procedure_id, drawing_id) values (71, 71);
+insert into blood_donations (procedure_id, drawing_id) values (46, 72);
+insert into blood_donations (procedure_id, drawing_id) values (4, 73);
+insert into blood_donations (procedure_id, drawing_id) values (85, 74);
+insert into blood_donations (procedure_id, drawing_id) values (34, 75);
+insert into blood_donations (procedure_id, drawing_id) values (58, 76);
+insert into blood_donations (procedure_id, drawing_id) values (25, 77);
+insert into blood_donations (procedure_id, drawing_id) values (76, 78);
+insert into blood_donations (procedure_id, drawing_id) values (61, 79);
+insert into blood_donations (procedure_id, drawing_id) values (48, 80);
+insert into blood_donations (procedure_id, drawing_id) values (34, 81);
+insert into blood_donations (procedure_id, drawing_id) values (7, 82);
+insert into blood_donations (procedure_id, drawing_id) values (99, 83);
+insert into blood_donations (procedure_id, drawing_id) values (51, 84);
+insert into blood_donations (procedure_id, drawing_id) values (80, 85);
+insert into blood_donations (procedure_id, drawing_id) values (57, 86);
+insert into blood_donations (procedure_id, drawing_id) values (88, 87);
+insert into blood_donations (procedure_id, drawing_id) values (5, 88);
+insert into blood_donations (procedure_id, drawing_id) values (81, 89);
+insert into blood_donations (procedure_id, drawing_id) values (87, 90);
+insert into blood_donations (procedure_id, drawing_id) values (68, 91);
+insert into blood_donations (procedure_id, drawing_id) values (8, 92);
+insert into blood_donations (procedure_id, drawing_id) values (59, 93);
+insert into blood_donations (procedure_id, drawing_id) values (88, 94);
+insert into blood_donations (procedure_id, drawing_id) values (82, 95);
+insert into blood_donations (procedure_id, drawing_id) values (100, 96);
+insert into blood_donations (procedure_id, drawing_id) values (21, 97);
+insert into blood_donations (procedure_id, drawing_id) values (91, 98);
+insert into blood_donations (procedure_id, drawing_id) values (16, 99);
+insert into blood_donations (procedure_id, drawing_id) values (84, 100);

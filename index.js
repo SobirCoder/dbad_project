@@ -5,10 +5,10 @@ var app = express(),
 const mysql = require('mysql');
 var pool  = mysql.createPool({
   connectionLimit : 10,
-  host            : 'freedb.tech',
-  user            : 'freedbtech_dbaduser',
-  password        : 'dbad_user',
-  database        : 'freedbtech_dbad'
+  host            : 'localhost',
+  user            : 'techiela_team27',
+  password        : 'techiela_team27',
+  database        : 'techiela_team27'
 });
 
 app.use(bodyParser.json());
